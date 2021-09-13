@@ -1,4 +1,4 @@
-import { renderWithRouter } from "../testHelpers.js";
+import { renderWithRouterAndProvider } from "../testHelpers.js";
 import userEvent from "@testing-library/user-event";
 import SearchBox from "./SearchBox";
 
@@ -6,12 +6,12 @@ describe("SearchBox", () => {
   it("renders input", () => {
     const props = {
       term: "",
-      onSearch: jest.fn(),
+      handleSearch: jest.fn(),
     };
-    const { container } = renderWithRouter(<SearchBox {...props} />);
+    const { container } = renderWithRouterAndProvider(<SearchBox {...props} />);
     const input = container.querySelector('input[type="text"]');
     userEvent.type(input, "domain");
-    expect(props.onSearch).toHaveBeenCalled();
+    expect(props.handleSearch).toHaveBeenCalled();
   });
 
   it("trims empty strings", () => {
@@ -19,7 +19,7 @@ describe("SearchBox", () => {
       term: "",
       onSearch: jest.fn(),
     };
-    const { container } = renderWithRouter(<SearchBox {...props} />);
+    const { container } = renderWithRouterAndProvider(<SearchBox {...props} />);
     const input = container.querySelector('input[type="text"]');
     userEvent.type(input, "   ");
     expect(props.onSearch).not.toHaveBeenCalled();

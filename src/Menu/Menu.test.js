@@ -1,4 +1,4 @@
-import { renderWithRouter } from "../testHelpers.js";
+import { renderWithRouterAndProvider } from "../testHelpers.js";
 import userEvent from "@testing-library/user-event";
 import Menu from "./Menu.js";
 
@@ -8,7 +8,7 @@ describe("Menu", () => {
       term: "",
       setTerm: jest.fn(),
     };
-    const { container } = renderWithRouter(<Menu {...props} />);
+    const { container } = renderWithRouterAndProvider(<Menu {...props} />);
     const button = container.querySelector('[data-test="user-actions"]');
     expect(button).not.toEqual(null);
     const menu = document.querySelector("#primary-search-account-menu");

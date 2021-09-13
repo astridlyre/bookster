@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { AppBar, Toolbar, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -6,6 +7,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import SearchBox from "../SearchBox/SearchBox.js";
 import Heading from "./Heading.js";
 import UserActions from "./UserActions.js";
+import { setSearchTerm } from "../redux/actions/actions.js";
 import config from "../config.js";
 
 const useStyles = makeStyles(theme => ({
@@ -17,14 +19,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Menu({ term, setTerm }) {
+export default function Menu() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
 
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
   const handleProfileMenuOpen = event => setAnchorEl(event.currentTarget);
+  const handleSearch = term => dispatch(setSearchTerm(term));
 
   const menuId = "primary-search-account-menu";
 
@@ -42,7 +45,7 @@ export default function Menu({ term, setTerm }) {
             <MenuIcon />
           </IconButton>
           <Heading text={config.siteName} />
-          <SearchBox term={term} onSearch={setTerm} />
+          <SearchBox handleSearch={handleSearch} />
           <div className={classes.grow} />
           <IconButton
             edge="end"

@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import { InputBase } from "@material-ui/core";
@@ -43,19 +44,20 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SearchBox({ term, onSearch }) {
+export default function SearchBox({ handleSearch }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const term = useSelector(state => state.term);
 
   const protect = event => {
     const value = clone(event.target.value);
     if (!isEmpty(value.trim()) || value.length === 0) {
       if (location.pathname !== "/") {
         history.push("/");
-        return onSearch(event.target.value);
+        return handleSearch(event.target.value);
       }
-      return onSearch(event.target.value);
+      return handleSearch(event.target.value);
     }
   };
 

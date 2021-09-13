@@ -28,7 +28,7 @@ export default function BookDetail({ book, loading, error }) {
   const [showFull, setShowFull] = useState(false);
 
   const getDescriptionFor = book =>
-    book ? book.description || book.title : "";
+    book?.description ? book.description : book?.title ? book.title : "";
   const textToShow =
     getDescriptionFor(book).length > 300
       ? showFull
