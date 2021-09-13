@@ -44,7 +44,7 @@ export default function BookCard({ book }) {
   const getDescriptionFor = book => book.description || book.name;
 
   return (
-    <Grid item xs={4} sm={4} className={`${classes.root} book-item`}>
+    <Grid item xs={12} sm={6} md={4} className={`${classes.root} book-item`}>
       <Card>
         <CardActionArea>
           <CardContent>
