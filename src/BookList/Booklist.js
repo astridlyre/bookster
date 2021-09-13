@@ -8,8 +8,9 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
     color: theme.palette.text.secondary,
+    width: "100vw",
+    margin: "0",
   },
 }));
 
@@ -26,9 +27,9 @@ export default function Booklist({ books, loading, error }) {
 
   return (
     <div data-test="book-list" className={classes.root}>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} className={classes.paper}>
         {books.map(book => (
-          <BookCard key={book.id} book={book} classes={classes} />
+          <BookCard key={book.id} book={book} />
         ))}
       </Grid>
     </div>

@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   CardContent,
+  CardActionArea,
   CardActions,
   Grid,
   Typography,
@@ -11,6 +12,9 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    boxSizing: "border-box",
+  },
   title: {
     maxHeight: 30,
     overflow: "hidden",
@@ -28,12 +32,8 @@ const useStyles = makeStyles(theme => ({
     color: "inherit",
   },
   showMore: {
-    color: "#8f8f8f",
-    background: "none",
-    border: "none",
-    padding: 0,
-    display: "inline",
-    fontSize: "0.85rem",
+    color: theme.palette.text.secondary,
+    fontWeight: "600",
     cursor: "pointer",
   },
 }));
@@ -44,37 +44,39 @@ export default function BookCard({ book }) {
   const getDescriptionFor = book => book.description || book.name;
 
   return (
-    <Grid item xs={4} sm={4} className="book-item">
+    <Grid item xs={4} sm={4} className={`${classes.root} book-item`}>
       <Card>
-        <CardContent>
-          <Typography
-            gutterBottom
-            variant="h5"
-            component="h2"
-            className={classes.title}
-          >
-            {book.title}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-            className={`${
-              showFull ? classes.descriptionFull : classes.description
-            } book-description`}
-          >
-            {getDescriptionFor(book)}
-          </Typography>
-          {book?.description?.length > 80 && (
-            <button
-              title={showFull ? "Show less" : "Show more"}
-              className={`${classes.showMore} show-more`}
-              onClick={() => setShowFull(s => !s)}
+        <CardActionArea>
+          <CardContent>
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="h2"
+              className={classes.title}
             >
-              {showFull ? "Show less" : "Show more"}
-            </button>
-          )}
-        </CardContent>
+              {book.title}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              component="p"
+              className={`${
+                showFull ? classes.descriptionFull : classes.description
+              } book-description`}
+            >
+              {getDescriptionFor(book)}
+            </Typography>
+            {book?.description?.length > 80 && (
+              <span
+                title={showFull ? "Show less" : "Show more"}
+                className={`${classes.showMore} show-more`}
+                onClick={() => setShowFull(s => !s)}
+              >
+                {showFull ? "Show less" : "Show more"}
+              </span>
+            )}
+          </CardContent>
+        </CardActionArea>
         <CardActions>
           <Button size="small" color="primary">
             <Link to={`/books/${book.id}`} className={classes.link}>

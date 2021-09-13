@@ -1,8 +1,11 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, Container, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(2),
+  },
   link: {
     textDecoration: "none",
     color: "#8f8f8f",
@@ -10,6 +13,9 @@ const useStyles = makeStyles(theme => ({
     border: "none",
     cursor: "pointer",
     padding: 0,
+  },
+  paper: {
+    padding: theme.spacing(4),
   },
 }));
 
@@ -34,21 +40,34 @@ export default function BookDetail({ book, loading, error }) {
   }
 
   return (
-    <Grid item className="detail">
-      <Typography variant="h1" component="h1" className="book-title">
-        {book.title}
-      </Typography>
-      <Typography variant="body2" component="p" className="book-description">
-        {textToShow}
-      </Typography>
-      {getDescriptionFor(book).length > 300 && (
-        <button
-          className={`${classes.link} show-more`}
-          onClick={() => setShowFull(s => !s)}
-        >
-          Show more
-        </button>
-      )}
+    <Grid item className={`${classes.root} detail`}>
+      <Container maxWidth="md">
+        <Paper elevation="1" className={classes.paper}>
+          <Typography
+            variant="h1"
+            component="h1"
+            className="book-title"
+            gutterBottom
+          >
+            {book.title}
+          </Typography>
+          <Typography
+            variant="body2"
+            component="p"
+            className="book-description"
+          >
+            {textToShow}
+          </Typography>
+          {getDescriptionFor(book).length > 300 && (
+            <button
+              className={`${classes.link} show-more`}
+              onClick={() => setShowFull(s => !s)}
+            >
+              Show more
+            </button>
+          )}
+        </Paper>
+      </Container>
     </Grid>
   );
 }

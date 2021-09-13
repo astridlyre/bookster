@@ -1,19 +1,28 @@
+import { useState, useEffect } from "react";
+import { useService } from "./hooks/hooks.js";
 import { Route, Switch } from "react-router-dom";
-import { Typography } from "@material-ui/core";
 import BooklistContainer from "./BookList/BooklistContainer.js";
 import BookDetailContainer from "./BookDetail/BookDetailContainer.js";
+import Menu from "./Menu/Menu.js";
 
 function App() {
+  const [books, setUrl] = useService("books");
+  const [term, setTerm] = useState("");
+
+  useEffect(() => {
+    setUrl(`books?q=${term}`);
+  }, [term, setUrl]);
+
   return (
-    <div>
-      <Typography variant="h2" component="h2" data-test="heading">
-        Bookish
-      </Typography>
+    <>
+      <Menu term={term} setTerm={setTerm} />
       <Switch>
-        <Route exact path="/" component={BooklistContainer} />
+        <Route exact path="/">
+          <BooklistContainer books={books} />
+        </Route>
         <Route path="/books/:id" component={BookDetailContainer} />
       </Switch>
-    </div>
+    </>
   );
 }
 
