@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   Button,
   IconButton,
@@ -9,13 +9,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import BookIcon from "./BookIcon.js";
 
 const useStyles = makeStyles(theme => ({
-  link: {
-    color: "inherit",
-    textDecoration: "none",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   iconButton: {
     marginRight: theme.spacing(2),
   },
@@ -24,6 +17,9 @@ const useStyles = makeStyles(theme => ({
 export default function Heading({ text }) {
   const showText = useMediaQuery("(min-width: 601px)");
   const classes = useStyles();
+  const history = useHistory();
+
+  const goHome = () => history.push("/");
 
   if (!showText) {
     return (
@@ -31,20 +27,17 @@ export default function Heading({ text }) {
         color="inherit"
         className={classes.iconButton}
         title="Home page"
+        onClick={goHome}
       >
-        <Link to={"/"} className={classes.link}>
-          <BookIcon />
-        </Link>
+        <BookIcon />
       </IconButton>
     );
   }
 
   return (
-    <Button startIcon={<BookIcon />} color="inherit">
+    <Button startIcon={<BookIcon />} color="inherit" onClick={goHome}>
       <Typography variant="h6" component="h2" data-test="heading">
-        <Link to={"/"} className={classes.link}>
-          {text}
-        </Link>
+        {text}
       </Typography>
     </Button>
   );

@@ -7,7 +7,7 @@ describe("Booklist", () => {
       loading: true,
     };
     const { container } = renderWithRouter(<Booklist {...props} />);
-    const content = container.querySelector("p");
+    const content = container.querySelector('[data-test="loading-message"]');
     expect(content.innerHTML).toContain("Loading");
   });
 
@@ -16,8 +16,8 @@ describe("Booklist", () => {
       error: true,
     };
     const { container } = renderWithRouter(<Booklist {...props} />);
-    const content = container.querySelector("p");
-    expect(content.innerHTML).toContain("Error");
+    const content = container.querySelector('[data-test="error-message"]');
+    expect(content.innerHTML).toContain("an Error has occured");
   });
 
   it("renders books", () => {
@@ -38,7 +38,7 @@ describe("Booklist", () => {
         {
           name: "Refactoring",
           description:
-            "The book about how to do refactoring with a very long title that has a lot of characters, so if you want to read it you have to click view more, otherwise it will be hidden, isn't that great?",
+            "The book about how to do refactoring with a very long title that has a lot of ch... (more)",
           id: 1,
         },
       ],
@@ -46,7 +46,7 @@ describe("Booklist", () => {
     const { container } = renderWithRouter(<Booklist {...props} />);
     const link = container.querySelector(".show-more");
     const description = container.querySelector(".book-description");
-    expect(link.innerHTML).toEqual("Show more");
-    expect(description.innerHTML).toEqual(props.books[0].description);
+    expect(link.innerHTML).toEqual("(more)");
+    expect(description.textContent).toEqual(props.books[0].description);
   });
 });

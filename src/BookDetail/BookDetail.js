@@ -1,6 +1,7 @@
 import { Grid, Typography, Container, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
+import Loader from "../Loader/Loader.js";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,6 +17,9 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(4),
+  },
+  error: {
+    color: theme.palette.error,
   },
 }));
 
@@ -33,10 +37,14 @@ export default function BookDetail({ book, loading, error }) {
       : getDescriptionFor(book);
 
   if (error) {
-    return <p>Error</p>;
+    return (
+      <p data-test="error-message" className={classes.error}>
+        an Error has occured
+      </p>
+    );
   }
   if (loading) {
-    return <p>Loading</p>;
+    return <Loader />;
   }
 
   return (

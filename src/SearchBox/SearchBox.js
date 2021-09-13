@@ -1,3 +1,4 @@
+import { useHistory, useLocation } from "react-router-dom";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import { InputBase } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
@@ -44,10 +45,16 @@ const useStyles = makeStyles(theme => ({
 
 export default function SearchBox({ term, onSearch }) {
   const classes = useStyles();
+  const history = useHistory();
+  const location = useLocation();
 
   const protect = event => {
     const value = clone(event.target.value);
     if (!isEmpty(value.trim()) || value.length === 0) {
+      if (location.pathname !== "/") {
+        history.push("/");
+        return onSearch(event.target.value);
+      }
       return onSearch(event.target.value);
     }
   };
@@ -59,6 +66,7 @@ export default function SearchBox({ term, onSearch }) {
       </div>
       <InputBase
         placeholder="Search..."
+        title="Search for a book"
         value={term}
         data-test="search"
         onChange={protect}

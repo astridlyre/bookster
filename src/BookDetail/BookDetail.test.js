@@ -7,7 +7,7 @@ describe("BookDetail", () => {
       loading: true,
     };
     const { container } = render(<BookDetail {...props} />);
-    const content = container.querySelector("p");
+    const content = container.querySelector('[data-test="loading-message"]');
     expect(content.innerHTML).toEqual("Loading");
   });
 
@@ -16,8 +16,8 @@ describe("BookDetail", () => {
       error: true,
     };
     const { container } = render(<BookDetail {...props} />);
-    const content = container.querySelector("p");
-    expect(content.innerHTML).toEqual("Error");
+    const content = container.querySelector('[data-test="error-message"]');
+    expect(content.innerHTML).toEqual("an Error has occured");
   });
 
   it("renders title", () => {

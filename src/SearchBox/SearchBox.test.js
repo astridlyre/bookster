@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { renderWithRouter } from "../testHelpers.js";
 import userEvent from "@testing-library/user-event";
 import SearchBox from "./SearchBox";
 
@@ -8,7 +8,7 @@ describe("SearchBox", () => {
       term: "",
       onSearch: jest.fn(),
     };
-    const { container } = render(<SearchBox {...props} />);
+    const { container } = renderWithRouter(<SearchBox {...props} />);
     const input = container.querySelector('input[type="text"]');
     userEvent.type(input, "domain");
     expect(props.onSearch).toHaveBeenCalled();
@@ -19,7 +19,7 @@ describe("SearchBox", () => {
       term: "",
       onSearch: jest.fn(),
     };
-    const { container } = render(<SearchBox {...props} />);
+    const { container } = renderWithRouter(<SearchBox {...props} />);
     const input = container.querySelector('input[type="text"]');
     userEvent.type(input, "   ");
     expect(props.onSearch).not.toHaveBeenCalled();

@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
@@ -20,12 +20,6 @@ const useStyles = makeStyles(theme => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
-  description: {
-    maxHeight: 40,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  },
-  descriptionFull: {},
   link: {
     textDecoration: "none",
     textTransform: "uppercase",
@@ -35,57 +29,67 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     fontWeight: "600",
     cursor: "pointer",
+    background: "none",
+    border: "none",
+    padding: 0,
+    fontFamily: theme.typography.fontFamily,
+    outlineColor: theme.palette.secondary.main,
+    display: "inline",
   },
 }));
 
 export default function BookCard({ book }) {
   const classes = useStyles();
   const [showFull, setShowFull] = useState(false);
-  const getDescriptionFor = book => book.description || book.name;
+  const history = useHistory();
+
+  const getDescriptionFor = book => {
+    let text = book.description;
+    if (!text) text = book.title;
+    if (showFull || text.length < 80) return text;
+    return `${text.substring(0, 80)}... `;
+  };
+  const goToBook = () => history.push(`/books/${book.id}`);
 
   return (
     <Grid item xs={12} sm={6} md={4} className={`${classes.root} book-item`}>
       <Card>
-        <CardActionArea>
-          <CardContent>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="h2"
-              className={classes.title}
-            >
-              {book.title}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              component="p"
-              className={`${
-                showFull ? classes.descriptionFull : classes.description
-              } book-description`}
-            >
-              {getDescriptionFor(book)}
-            </Typography>
+        <CardContent>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="h2"
+            className={classes.title}
+          >
+            {book.title}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            className="book-description"
+          >
+            {getDescriptionFor(book)}
             {book?.description?.length > 80 && (
-              <span
+              <button
                 title={showFull ? "Show less" : "Show more"}
                 className={`${classes.showMore} show-more`}
                 onClick={() => setShowFull(s => !s)}
               >
-                {showFull ? "Show less" : "Show more"}
-              </span>
+                {showFull ? "(less)" : "(more)"}
+              </button>
             )}
-          </CardContent>
-        </CardActionArea>
+          </Typography>
+        </CardContent>
         <CardActions>
-          <Button size="small" color="inherit">
-            <Link
-              to={`/books/${book.id}`}
-              className={classes.link}
-              data-test="view-details"
-            >
-              View Details
-            </Link>
+          <Button
+            size="small"
+            color="inherit"
+            data-test="view-details"
+            onClick={goToBook}
+            title={`View details on ${book.title}`}
+          >
+            View Details
           </Button>
         </CardActions>
       </Card>

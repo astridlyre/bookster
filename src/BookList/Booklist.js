@@ -1,6 +1,7 @@
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import BookCard from "./BookCard.js";
+import Loader from "../Loader/Loader.js";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,11 +19,11 @@ export default function Booklist({ books, loading, error }) {
   const classes = useStyles();
 
   if (error) {
-    return <p>Error</p>;
+    return <p data-test="error-message">an Error has occured</p>;
   }
 
   if (loading) {
-    return <p>Loading</p>;
+    return <Loader />;
   }
 
   return (
