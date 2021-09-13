@@ -42,7 +42,7 @@ export default function BookDetail({ book, loading, error }) {
   return (
     <Grid item className={`${classes.root} detail`}>
       <Container maxWidth="md">
-        <Paper elevation="1" className={classes.paper}>
+        <Paper elevation={1} className={classes.paper}>
           <Typography
             variant="h1"
             component="h1"

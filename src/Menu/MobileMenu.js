@@ -1,4 +1,4 @@
-import { IconButton, Menu, MenuItem } from "@material-ui/core";
+import { Button, Menu, MenuItem } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 
 export default function MobileMenu({
@@ -20,14 +20,15 @@ export default function MobileMenu({
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
+        <Button
           aria-label="Account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
+          startIcon={<AccountCircle />}
         >
-          <AccountCircle />
-        </IconButton>
+          Profile
+        </Button>
       </MenuItem>
     </Menu>
   );

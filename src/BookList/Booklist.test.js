@@ -1,10 +1,5 @@
-import { render } from "@testing-library/react";
-import { MemoryRouter as Router } from "react-router-dom";
+import { renderWithRouter } from "../testHelpers.js";
 import Booklist from "./Booklist.js";
-
-const renderWithRouter = component => {
-  return { ...render(<Router>{component}</Router>) };
-};
 
 describe("Booklist", () => {
   it("loading", () => {

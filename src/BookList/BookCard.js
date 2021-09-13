@@ -78,8 +78,12 @@ export default function BookCard({ book }) {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
-            <Link to={`/books/${book.id}`} className={classes.link}>
+          <Button size="small" color="inherit">
+            <Link
+              to={`/books/${book.id}`}
+              className={classes.link}
+              data-test="view-details"
+            >
               View Details
             </Link>
           </Button>
