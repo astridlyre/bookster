@@ -5,23 +5,23 @@ export function useService(req, initialValue) {
   const [data, setData] = useState(initialValue);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
-  const callService = async () => {
-    setLoading(true);
-    setError(false);
-    try {
-      const res = await get(req);
-      setData(res);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setError(true);
-    }
-  };
+  const [url, setUrl] = useState(req);
 
   useEffect(() => {
+    const callService = async () => {
+      setLoading(true);
+      setError(false);
+      try {
+        const res = await get(url);
+        setData(res);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setError(true);
+      }
+    };
     callService();
-  }, [req, setData]);
+  }, [url, setData]);
 
   return [
     {
@@ -29,6 +29,6 @@ export function useService(req, initialValue) {
       loading,
       error,
     },
-    callService,
+    setUrl,
   ];
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useService } from "./hooks/hooks.js";
+import { useService } from "../hooks/hooks.js";
 import BookDetail from "./BookDetail.js";
 
 export default function BookDetailContainer({ match }) {

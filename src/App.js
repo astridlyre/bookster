@@ -1,7 +1,7 @@
 import { Route, Switch } from "react-router-dom";
 import { Typography } from "@material-ui/core";
-import BooklistContainer from "./BooklistContainer.js";
-import BookDetailContainer from "./BookDetailContainer.js";
+import BooklistContainer from "./BookList/BooklistContainer.js";
+import BookDetailContainer from "./BookDetail/BookDetailContainer.js";
 
 function App() {
   return (
