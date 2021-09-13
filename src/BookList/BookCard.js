@@ -9,6 +9,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,14 +38,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function BookCard({ book }) {
+export default function BookCard({ bookId }) {
   const classes = useStyles();
   const [showFull, setShowFull] = useState(false);
   const history = useHistory();
+  const book = useSelector(
+    state => state.books.list.find(book => book.id === bookId) || {}
+  );
 
   const getDescriptionFor = book => {
-    let text = book.description;
-    if (!text) text = book.title;
+    let text = book.description || book.title;
+    if (!text) text = "";
     if (showFull || text.length < 80) return text;
     return `${text.substring(0, 80)}... `;
   };

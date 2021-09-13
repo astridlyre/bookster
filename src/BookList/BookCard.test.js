@@ -1,30 +1,42 @@
-import { renderWithRouter } from "../testHelpers.js";
+import { renderWithRouterAndProvider, testBooks } from "../testHelpers.js";
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
 import BookCard from "./BookCard.js";
 
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
 describe("BookCard", () => {
+  let store;
+  beforeEach(() => {
+    store = mockStore({
+      books: {
+        list: testBooks,
+      },
+    });
+  });
+
   it("should render title", () => {
     const props = {
-      book: {
-        title: "Refactoring",
-        id: 1,
-        description: "Martin Fowler's refactoring...",
-      },
+      bookId: 1,
     };
-    const { container } = renderWithRouter(<BookCard {...props} />);
+    const { container } = renderWithRouterAndProvider(
+      <BookCard {...props} />,
+      store
+    );
     const title = container.querySelector("h2");
     expect(title.innerHTML).toEqual("Refactoring");
   });
 
   it("should render description", () => {
     const props = {
-      book: {
-        title: "Building Microservices",
-        id: 3,
-        description: "Author Sam Newman",
-      },
+      bookId: 3,
     };
-    const { container } = renderWithRouter(<BookCard {...props} />);
+    const { container } = renderWithRouterAndProvider(
+      <BookCard {...props} />,
+      store
+    );
     const description = container.querySelector("p");
-    expect(description.innerHTML).toEqual(props.book.description);
+    expect(description.innerHTML).toEqual(testBooks[1].description);
   });
 });

@@ -1,9 +1,10 @@
 import axios from "axios";
 import * as actions from "./redux/actions/actions.js";
+import { testBooks } from "./testHelpers.js";
 import store from "./store.js";
 
 describe("Store", () => {
-  const books = [{ id: 1, title: "Refactoring" }];
+  const books = testBooks.slice(0, 1);
 
   it("Fetches books from remote", () => {
     axios.get = jest

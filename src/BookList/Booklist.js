@@ -30,7 +30,7 @@ export default function Booklist({ books, loading, error }) {
     <div data-test="book-list" className={classes.root}>
       <Grid container spacing={3} className={classes.paper}>
         {books.map(book => (
-          <BookCard key={book.id} book={book} />
+          <BookCard key={book.id} bookId={book.id} />
         ))}
       </Grid>
     </div>

@@ -11,12 +11,31 @@ export function renderWithProvider(component) {
   return { ...render(<Provider store={store}>{component}</Provider>) };
 }
 
-export function renderWithRouterAndProvider(component) {
+export function renderWithRouterAndProvider(component, mockStore) {
   return {
     ...render(
-      <Provider store={store}>
+      <Provider store={mockStore ? mockStore : store}>
         <Router>{component}</Router>
       </Provider>
     ),
   };
 }
+
+export const testBooks = [
+  {
+    id: 1,
+    title: "Refactoring",
+    description:
+      "The book about how to do refactoring with a very long title that has a lot of ch... (more)",
+  },
+  {
+    id: 3,
+    title: "Building Microservices",
+    description: "Author Sam Newman",
+  },
+  {
+    id: 2,
+    title: "Acceptance tests driven development with React",
+    description: "Test description",
+  },
+];

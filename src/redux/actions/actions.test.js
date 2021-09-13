@@ -3,6 +3,7 @@ import * as actions from "./actions.js";
 import * as types from "../types.js";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
+import { testBooks } from "../../testHelpers.js";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -23,16 +24,12 @@ describe("BookListContainer related actions", () => {
   });
 
   it("Fetches data successfully", () => {
-    const books = [
-      { id: 1, title: "Refactoring" },
-      { id: 2, title: "Domain-driven design" },
-    ];
     axios.get = jest
       .fn()
-      .mockImplementation(() => Promise.resolve({ data: books }));
+      .mockImplementation(() => Promise.resolve({ data: testBooks }));
     const expectedActions = [
       { type: types.FETCH_BOOKS_PENDING },
-      { type: types.FETCH_BOOKS_SUCCESS, books },
+      { type: types.FETCH_BOOKS_SUCCESS, books: testBooks },
     ];
     const store = mockStore({ books: { list: [] } });
     return store.dispatch(actions.fetchBooks()).then(() => {
@@ -57,21 +54,17 @@ describe("BookListContainer related actions", () => {
   });
 
   it("Searches books with term", () => {
-    const books = [
-      { id: 1, title: "Refactoring" },
-      { id: 2, title: "Domain-driven design" },
-    ];
     const expectedActions = [
-      { type: types.SET_SEARCH_TERM, term: "domain" },
+      { type: types.SET_SEARCH_TERM, term: "driven" },
       { type: types.FETCH_BOOKS_PENDING },
-      { type: types.FETCH_BOOKS_SUCCESS, books },
+      { type: types.FETCH_BOOKS_SUCCESS, books: testBooks },
     ];
     axios.get = jest
       .fn()
-      .mockImplementation(() => Promise.resolve({ data: books }));
+      .mockImplementation(() => Promise.resolve({ data: testBooks }));
     const store = mockStore({ books: { list: [] }, term: "" });
     store
-      .dispatch(actions.setSearchTerm("domain"))
+      .dispatch(actions.setSearchTerm("driven"))
       .then(() => {
         store.dispatch(actions.fetchBooks()).then(() => {
           const actions = store.getActions();
@@ -82,23 +75,21 @@ describe("BookListContainer related actions", () => {
   });
 
   it("Fetches book", () => {
-    const book = { id: 1, title: "Refactoring" };
     const expectedActions = [
       { type: types.FETCH_CURRENT_BOOK_PENDING },
-      { type: types.FETCH_CURRENT_BOOK_SUCCESS, book },
+      { type: types.FETCH_CURRENT_BOOK_SUCCESS, book: testBooks[0] },
     ];
     axios.get = jest
       .fn()
-      .mockImplementation(() => Promise.resolve({ data: book }));
+      .mockImplementation(() => Promise.resolve({ data: testBooks[0] }));
     const store = mockStore({ currentBook: {} });
-    store.dispatch(actions.fetchABook(book.id)).then(() => {
+    store.dispatch(actions.fetchABook(testBooks[0].id)).then(() => {
       const actions = store.getActions();
       expect(actions).toEqual(expectedActions);
     });
   });
 
   it("Fetches book with error", () => {
-    const book = { id: 1, title: "Refactoring" };
     const expectedActions = [
       { type: types.FETCH_CURRENT_BOOK_PENDING },
       { type: types.FETCH_CURRENT_BOOK_FAILED, error: "Something went wrong" },
@@ -109,7 +100,7 @@ describe("BookListContainer related actions", () => {
         Promise.reject({ message: "Something went wrong" })
       );
     const store = mockStore({ currentBook: {} });
-    store.dispatch(actions.fetchABook(book.id)).then(() => {
+    store.dispatch(actions.fetchABook(testBooks[0].id)).then(() => {
       const actions = store.getActions();
       expect(actions).toEqual(expectedActions);
     });
