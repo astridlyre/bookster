@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { withBookSelector } from "../redux/selector.js";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,9 +43,7 @@ export default function BookCard({ bookId }) {
   const classes = useStyles();
   const [showFull, setShowFull] = useState(false);
   const history = useHistory();
-  const book = useSelector(
-    state => state.books.list.find(book => book.id === bookId) || {}
-  );
+  const book = useSelector(withBookSelector(bookId));
 
   const getDescriptionFor = book => {
     let text = book.description || book.title;

@@ -17,3 +17,8 @@ export const currentBookSelector = createSelector(
   ],
   (book, loading, error) => ({ book, loading, error })
 );
+
+export const searchTermSelector = state => state.term;
+
+export const withBookSelector = id => state =>
+  state.books.list.find(book => book.id === id) || {};

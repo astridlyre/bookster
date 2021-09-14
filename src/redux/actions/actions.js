@@ -37,3 +37,7 @@ export function fetchABook(id) {
     }
   };
 }
+
+export function postReview(bookId, review) {
+  return async dispatch => {};
+}

@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { searchTermSelector } from "../redux/selector.js";
 import { useHistory, useLocation } from "react-router-dom";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import { InputBase } from "@material-ui/core";
@@ -48,7 +49,7 @@ export default function SearchBox({ handleSearch }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const term = useSelector(state => state.term);
+  const term = useSelector(searchTermSelector);
 
   const protect = event => {
     const value = clone(event.target.value);

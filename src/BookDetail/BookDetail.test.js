@@ -1,4 +1,5 @@
 import { render } from "@testing-library/react";
+import { testReviews, testBooks } from "../testHelpers.js";
 import BookDetail from "./BookDetail.js";
 
 describe("BookDetail", () => {
@@ -22,9 +23,7 @@ describe("BookDetail", () => {
 
   it("renders title", () => {
     const props = {
-      book: {
-        title: "Refactoring",
-      },
+      book: testBooks[0],
     };
     const { container } = render(<BookDetail {...props} />);
     const content = container.querySelector("h1.book-title");
@@ -71,5 +70,22 @@ describe("BookDetail", () => {
     const description = container.querySelector(".book-description");
     expect(link.innerHTML).toEqual("Show more");
     expect(description.innerHTML).toEqual(props.book.description);
+  });
+
+  it("renders reviews", () => {
+    const props = {
+      book: {
+        name: "Refactoring",
+        description: "Test description",
+        id: 1,
+        reviews: testReviews,
+      },
+    };
+    const { container } = render(<BookDetail {...props} />);
+    const reviews = container.querySelectorAll(
+      '[data-test="reviews-container"] .review'
+    );
+    expect(reviews.length).toBe(2);
+    expect(reviews[0].innerHTML).toEqual("Juntao");
   });
 });

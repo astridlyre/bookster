@@ -39,3 +39,16 @@ export const testBooks = [
     description: "Test description",
   },
 ];
+
+export const testReviews = [
+  {
+    name: "Juntao",
+    date: "2018/06/21",
+    content: "Excellent work, really impressed by your efforts",
+  },
+  {
+    name: "Abruzzi",
+    date: "2018/06/22",
+    content: "What a great book!",
+  },
+];

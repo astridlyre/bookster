@@ -1,7 +1,9 @@
-import { Grid, Typography, Container, Paper } from "@material-ui/core";
+import { Grid, Typography, Container, Paper, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import Loader from "../Loader/Loader.js";
+import ReviewList from "../ReviewList/ReviewList.js";
+import ReviewForm from "../ReviewForm/ReviewForm.js";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,7 +54,7 @@ export default function BookDetail({ book, loading, error }) {
       <Container maxWidth="md">
         <Paper elevation={1} className={classes.paper}>
           <Typography
-            variant="h1"
+            variant="h2"
             component="h1"
             className="book-title"
             gutterBottom
@@ -74,6 +76,8 @@ export default function BookDetail({ book, loading, error }) {
               Show more
             </button>
           )}
+          <Box>{book.reviews && <ReviewList reviews={book.reviews} />}</Box>
+          <ReviewForm bookId={book.id} />
         </Paper>
       </Container>
     </Grid>
