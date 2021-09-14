@@ -10,7 +10,11 @@ const initialState = {
   books: {
     list: [],
   },
-  currentBook: { book: {} },
+  currentBook: {
+    book: {
+      reviews: [],
+    },
+  },
   term: "",
 };
 

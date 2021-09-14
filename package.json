@@ -26,8 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "e2e": "cypress run",
-    "stub-server": "node ./stub-server/server.js --port 8080"
+    "e2e": "cypress run"
   },
   "eslintConfig": {
     "extends": [

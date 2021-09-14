@@ -30,7 +30,19 @@ export function currentBookReducer(state = {}, action) {
       return { book: action.book };
     case types.FETCH_CURRENT_BOOK_FAILED:
       return { ...state, error: true };
+    case types.POST_BOOK_REVIEW_SUCCESS:
+      return {
+        ...state,
+        book: addReview(state.book, action.review),
+      };
     default:
       return state;
   }
+}
+
+function addReview(book, review) {
+  return {
+    ...book,
+    reviews: book.reviews.concat(review),
+  };
 }

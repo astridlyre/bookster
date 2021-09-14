@@ -1,14 +1,13 @@
-import { testReviews } from "../testHelpers.js";
+import { testReviews, renderWithProvider } from "../testHelpers.js";
 import ReviewList from "./ReviewList.js";
-import { render } from "@testing-library/react";
-import toBeInTheDocument from "@testing-library/jest-dom";
+import "@testing-library/jest-dom";
 
 describe("ReviewList", () => {
   it("renders an empty list", () => {
     const props = {
-      reviews: [],
+      bookId: 1,
     };
-    const { container } = render(<ReviewList {...props} />);
+    const { container } = renderWithProvider(<ReviewList {...props} />);
     const reviews = container.querySelector('[data-test="reviews-container"]');
     expect(reviews).toBeInTheDocument();
   });
@@ -17,7 +16,7 @@ describe("ReviewList", () => {
     const props = {
       reviews: testReviews,
     };
-    const { container } = render(<ReviewList {...props} />);
+    const { container } = renderWithProvider(<ReviewList {...props} />);
     const reviews = container.querySelectorAll(
       '[data-test="reviews-container"] [data-test="review-name"]'
     );

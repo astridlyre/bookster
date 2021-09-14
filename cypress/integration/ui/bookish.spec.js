@@ -6,7 +6,7 @@ import axios from "axios";
 // check out the link below and learn how to write your first test:
 // https://on.cypress.io/writing-first-test
 const APP_URL = "http://localhost:3000";
-const API_URL = "http://localhost:8080";
+const API_URL = "http://localhost:4000";
 
 async function cleanup() {
   await axios.delete(`${API_URL}?_cleanup=true`);
@@ -54,9 +54,9 @@ describe("Bookster application", function () {
   it("Shows a book list", () => {
     checkBookListWith([
       "Refactoring",
-      "Domain-driven design",
       "Building Microservices",
-      "Acceptance Test Driven Development with React",
+      "Test-Driven Development By Example",
+      "Mastering React Test-Driven Development",
     ]);
   });
 
@@ -68,17 +68,17 @@ describe("Bookster application", function () {
   it("Searches for a title", () => {
     checkBookListWith([
       "Refactoring",
-      "Domain-driven design",
       "Building Microservices",
-      "Acceptance Test Driven Development with React",
+      "Test-Driven Development By Example",
+      "Mastering React Test-Driven Development",
     ]);
-    searchFor("design");
-    checkBookListWith(["Domain-driven design"]);
+    searchFor("micro");
+    checkBookListWith(["Building Microservices"]);
   });
 
   it("Writes a review for a book", () => {
-    gotoNthBookInTheList(0);
-    checkBookDetail("Refactoring");
+    gotoNthBookInTheList(1);
+    checkBookDetail("Building Microservices");
 
     cy.get('input[name="name"]').type("Juntao Qui");
     cy.get('textarea[name="content"]').type("Excellent work!");

@@ -119,10 +119,10 @@ describe("BookListContainer related actions", () => {
       .fn()
       .mockImplementation(() => Promise.resolve({ data: { review } }));
     const store = mockStore({ books: { list: [] }, term: "" });
-    return store.dispatch(actions.postReview(1, review)).then(() => {
+    return store.dispatch(actions.postReview(review)).then(() => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(
-        `${config.endpoint}/books/1`,
+        `${config.endpoint}/reviews/create`,
         review
       );
       expect(actions).toEqual([

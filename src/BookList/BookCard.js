@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 30,
     overflow: "hidden",
     textOverflow: "ellipsis",
+    marginBottom: theme.spacing(2),
   },
   link: {
     textDecoration: "none",
@@ -36,6 +37,12 @@ const useStyles = makeStyles(theme => ({
     fontFamily: theme.typography.fontFamily,
     outlineColor: theme.palette.secondary.main,
     display: "inline",
+  },
+  img: {
+    height: "8rem",
+    float: "left",
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -65,6 +72,7 @@ export default function BookCard({ bookId }) {
           >
             {book.title}
           </Typography>
+          <img src={book.image} alt={book.title} className={classes.img} />
           <Typography
             variant="body2"
             color="textSecondary"

@@ -28,18 +28,36 @@ export const testBooks = [
     image: "",
     description:
       "The book about how to do refactoring with a very long title that has a lot of ch... (more)",
+    reviews: [
+      {
+        name: "Juntao",
+        content: "Excellent work, really impressed by your efforts",
+        id: 1,
+        bookId: 1,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        name: "Abruzzi",
+        content: "What a great book!",
+        id: 2,
+        bookId: 1,
+        createdAt: new Date().toISOString(),
+      },
+    ],
   },
   {
     id: 3,
     title: "Building Microservices",
     description: "Author Sam Newman",
     image: "",
+    reviews: [],
   },
   {
     id: 2,
     title: "Acceptance tests driven development with React",
     description: "Test description",
     image: "",
+    reviews: [],
   },
 ];
 
@@ -48,12 +66,14 @@ export const testReviews = [
     name: "Juntao",
     content: "Excellent work, really impressed by your efforts",
     id: 1,
+    bookId: 1,
     createdAt: new Date().toISOString(),
   },
   {
     name: "Abruzzi",
     content: "What a great book!",
     id: 2,
+    bookId: 1,
     createdAt: new Date().toISOString(),
   },
 ];

@@ -8,6 +8,7 @@ import ReviewForm from "../ReviewForm/ReviewForm.js";
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(2),
+    marginBottom: theme.spacing(4),
   },
   link: {
     textDecoration: "none",
@@ -30,9 +31,11 @@ const useStyles = makeStyles(theme => ({
   page: {
     marginTop: theme.spacing(8),
     display: "flex",
+    alignItems: "flex-start",
     [theme.breakpoints.down("xs")]: {
       marginTop: theme.spacing(0),
       flexFlow: "column nowrap",
+      alignItems: "center",
     },
     gap: theme.spacing(4),
   },
@@ -44,6 +47,7 @@ export default function BookDetail({ book, loading, error }) {
 
   const getDescriptionFor = book =>
     book?.description ? book.description : book?.title ? book.title : "";
+
   const textToShow =
     getDescriptionFor(book).length > 300
       ? showFull
@@ -58,6 +62,7 @@ export default function BookDetail({ book, loading, error }) {
       </p>
     );
   }
+
   if (loading) {
     return <Loader />;
   }
@@ -95,7 +100,7 @@ export default function BookDetail({ book, loading, error }) {
             </Box>
           </Box>
           <Box className={classes.page}>
-            {book.reviews && <ReviewList reviews={book.reviews} />}
+            <ReviewList bookId={book.id} reviews={book.reviews} />
             <ReviewForm bookId={book.id} />
           </Box>
         </Paper>

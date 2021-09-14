@@ -7,6 +7,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import SearchBox from "../SearchBox/SearchBox.js";
 import Heading from "./Heading.js";
 import UserActions from "./UserActions.js";
+import HideOnScroll from "./HideOnScroll.js";
 import { setSearchTerm } from "../redux/actions/actions.js";
 import config from "../config.js";
 
@@ -33,38 +34,40 @@ export default function Menu() {
 
   const classes = useStyles();
   return (
-    <div className={classes.grow}>
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Heading text={config.siteName} />
-          <SearchBox handleSearch={handleSearch} />
-          <div className={classes.grow} />
-          <IconButton
-            edge="end"
-            aria-label="Account of current user"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
-            color="inherit"
-            data-test="user-actions"
-          >
-            <AccountCircle />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+    <>
+      <HideOnScroll>
+        <AppBar position="sticky" color="primary">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Heading text={config.siteName} />
+            <SearchBox handleSearch={handleSearch} />
+            <div className={classes.grow} />
+            <IconButton
+              edge="end"
+              aria-label="Account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+              data-test="user-actions"
+            >
+              <AccountCircle />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
       <UserActions
         handleMenuClose={handleMenuClose}
         anchorEl={anchorEl}
         menuId={menuId}
       />
-    </div>
+    </>
   );
 }

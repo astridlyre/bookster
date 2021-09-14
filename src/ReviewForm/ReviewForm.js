@@ -29,7 +29,12 @@ export default function ReviewForm({ bookId }) {
     event.preventDefault();
     const review = Object.fromEntries([...new FormData(formRef.current)]);
     formRef.current.reset();
-    return dispatch(postReview(bookId, review));
+    return dispatch(
+      postReview({
+        ...review,
+        bookId,
+      })
+    );
   };
   return (
     <form

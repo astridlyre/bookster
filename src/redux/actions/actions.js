@@ -38,12 +38,12 @@ export function fetchABook(id) {
   };
 }
 
-export function postReview(bookId, review) {
+export function postReview(review) {
   return async dispatch => {
     dispatch({ type: types.POST_BOOK_REVIEW_PENDING });
     try {
       const { data } = await axios.post(
-        `${config.endpoint}/books/${bookId}`,
+        `${config.endpoint}/reviews/create`,
         review
       );
       dispatch({ type: types.POST_BOOK_REVIEW_SUCCESS, review: data.review });
