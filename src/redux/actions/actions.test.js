@@ -3,7 +3,8 @@ import * as actions from "./actions.js";
 import * as types from "../types.js";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { testBooks } from "../../testHelpers.js";
+import { testBooks, testReviews } from "../../testHelpers.js";
+import config from "../../config.js";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -26,7 +27,9 @@ describe("BookListContainer related actions", () => {
   it("Fetches data successfully", () => {
     axios.get = jest
       .fn()
-      .mockImplementation(() => Promise.resolve({ data: testBooks }));
+      .mockImplementation(() =>
+        Promise.resolve({ data: { books: testBooks } })
+      );
     const expectedActions = [
       { type: types.FETCH_BOOKS_PENDING },
       { type: types.FETCH_BOOKS_SUCCESS, books: testBooks },
@@ -61,7 +64,9 @@ describe("BookListContainer related actions", () => {
     ];
     axios.get = jest
       .fn()
-      .mockImplementation(() => Promise.resolve({ data: testBooks }));
+      .mockImplementation(() =>
+        Promise.resolve({ data: { books: testBooks } })
+      );
     const store = mockStore({ books: { list: [] }, term: "" });
     store
       .dispatch(actions.setSearchTerm("driven"))
@@ -81,7 +86,9 @@ describe("BookListContainer related actions", () => {
     ];
     axios.get = jest
       .fn()
-      .mockImplementation(() => Promise.resolve({ data: testBooks[0] }));
+      .mockImplementation(() =>
+        Promise.resolve({ data: { book: testBooks[0] } })
+      );
     const store = mockStore({ currentBook: {} });
     store.dispatch(actions.fetchABook(testBooks[0].id)).then(() => {
       const actions = store.getActions();
@@ -103,6 +110,25 @@ describe("BookListContainer related actions", () => {
     store.dispatch(actions.fetchABook(testBooks[0].id)).then(() => {
       const actions = store.getActions();
       expect(actions).toEqual(expectedActions);
+    });
+  });
+
+  it("Saves a review for a book", () => {
+    const review = testReviews[0];
+    axios.post = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve({ data: { review } }));
+    const store = mockStore({ books: { list: [] }, term: "" });
+    return store.dispatch(actions.postReview(1, review)).then(() => {
+      const actions = store.getActions();
+      expect(axios.post).toHaveBeenCalledWith(
+        `${config.endpoint}/books/1`,
+        review
+      );
+      expect(actions).toEqual([
+        { type: types.POST_BOOK_REVIEW_PENDING },
+        { type: types.POST_BOOK_REVIEW_SUCCESS, review },
+      ]);
     });
   });
 });

@@ -1,3 +1,4 @@
+import axios from "axios";
 // bookish.spec.js created with Cypress
 //
 // Start writing your Cypress tests below!
@@ -5,6 +6,11 @@
 // check out the link below and learn how to write your first test:
 // https://on.cypress.io/writing-first-test
 const APP_URL = "http://localhost:3000";
+const API_URL = "http://localhost:8080";
+
+async function cleanup() {
+  await axios.delete(`${API_URL}?_cleanup=true`);
+}
 
 function goToApp() {
   cy.visit(APP_URL);
@@ -27,9 +33,9 @@ function gotoNthBookInTheList(n) {
   cy.get("div.book-item").contains("View Details").eq(n).click();
 }
 
-function checkBookDetail() {
+function checkBookDetail(expected) {
   cy.url().should("include", "/books/1");
-  cy.get("h1.book-title").contains("Refactoring");
+  cy.get("h1.book-title").contains(expected);
 }
 
 function searchFor(term) {
@@ -56,7 +62,7 @@ describe("Bookster application", function () {
 
   it("Goes to the detail page", () => {
     gotoNthBookInTheList(0);
-    checkBookDetail();
+    checkBookDetail("Refactoring");
   });
 
   it("Searches for a title", () => {
@@ -68,5 +74,18 @@ describe("Bookster application", function () {
     ]);
     searchFor("design");
     checkBookListWith(["Domain-driven design"]);
+  });
+
+  it("Writes a review for a book", () => {
+    gotoNthBookInTheList(0);
+    checkBookDetail("Refactoring");
+
+    cy.get('input[name="name"]').type("Juntao Qui");
+    cy.get('textarea[name="content"]').type("Excellent work!");
+    cy.get('button[name="submit"]').click();
+    cy.get('div[data-test="reviews-container"] .review').should(
+      "have.length",
+      1
+    );
   });
 });

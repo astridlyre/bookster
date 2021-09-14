@@ -10,16 +10,10 @@ export default function Theme({ children }) {
         palette: {
           type: prefersDarkMode ? "dark" : "light",
           primary: {
-            main: "#00838f",
-            light: "#41b3bf",
-            dark: "#005662",
-            contrastText: "#ffffff",
+            main: prefersDarkMode ? "#f8bbd0" : "#ad1457",
           },
           secondary: {
-            main: "#37474f",
-            light: "#62727b",
-            dark: "#102027",
-            contrastText: "#ffffff",
+            main: prefersDarkMode ? "#eceff1" : "#263238",
           },
         },
         typography: {

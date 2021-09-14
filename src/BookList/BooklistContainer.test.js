@@ -8,14 +8,22 @@ import config from "../config.js";
 describe("BooklistContainer", () => {
   it("renders", async () => {
     const mock = new MockAdapter(axios);
-    mock.onGet(`${config.endpoint}/books`).reply(200, [
-      { title: "Refactoring", id: 1, description: "Test description" },
-      {
-        title: "Acceptance tests driven development with React",
-        id: 2,
-        description: "Test description",
-      },
-    ]);
+    mock.onGet(`${config.endpoint}/books`).reply(200, {
+      books: [
+        {
+          title: "Refactoring",
+          id: 1,
+          description: "Test description",
+          image: "",
+        },
+        {
+          title: "Acceptance tests driven development with React",
+          id: 2,
+          description: "Test description",
+          image: "",
+        },
+      ],
+    });
     const { findByText } = renderWithProvider(<BooklistContainer />);
     const book1 = await findByText("Refactoring");
     const book2 = await findByText(

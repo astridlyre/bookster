@@ -1,5 +1,4 @@
-import { render } from "@testing-library/react";
-import { testReviews, testBooks } from "../testHelpers.js";
+import { testReviews, testBooks, renderWithProvider } from "../testHelpers.js";
 import BookDetail from "./BookDetail.js";
 
 describe("BookDetail", () => {
@@ -7,7 +6,7 @@ describe("BookDetail", () => {
     const props = {
       loading: true,
     };
-    const { container } = render(<BookDetail {...props} />);
+    const { container } = renderWithProvider(<BookDetail {...props} />);
     const content = container.querySelector('[data-test="loading-message"]');
     expect(content.innerHTML).toEqual("Loading");
   });
@@ -16,7 +15,7 @@ describe("BookDetail", () => {
     const props = {
       error: true,
     };
-    const { container } = render(<BookDetail {...props} />);
+    const { container } = renderWithProvider(<BookDetail {...props} />);
     const content = container.querySelector('[data-test="error-message"]');
     expect(content.innerHTML).toEqual("an Error has occured");
   });
@@ -25,7 +24,7 @@ describe("BookDetail", () => {
     const props = {
       book: testBooks[0],
     };
-    const { container } = render(<BookDetail {...props} />);
+    const { container } = renderWithProvider(<BookDetail {...props} />);
     const content = container.querySelector("h1.book-title");
     expect(content.innerHTML).toEqual(props.book.title);
   });
@@ -40,7 +39,7 @@ describe("BookDetail", () => {
           "their software",
       },
     };
-    const { container } = render(<BookDetail {...props} />);
+    const { container } = renderWithProvider(<BookDetail {...props} />);
     const description = container.querySelector("p.book-description");
     expect(description.innerHTML).toEqual(props.book.description);
   });
@@ -51,7 +50,7 @@ describe("BookDetail", () => {
         title: "Refactoring",
       },
     };
-    const { container } = render(<BookDetail {...props} />);
+    const { container } = renderWithProvider(<BookDetail {...props} />);
     const description = container.querySelector("p.book-description");
     expect(description.innerHTML).toEqual(props.book.title);
   });
@@ -65,7 +64,7 @@ describe("BookDetail", () => {
         id: 1,
       },
     };
-    const { container } = render(<BookDetail {...props} />);
+    const { container } = renderWithProvider(<BookDetail {...props} />);
     const link = container.querySelector(".show-more");
     const description = container.querySelector(".book-description");
     expect(link.innerHTML).toEqual("Show more");
@@ -81,9 +80,9 @@ describe("BookDetail", () => {
         reviews: testReviews,
       },
     };
-    const { container } = render(<BookDetail {...props} />);
+    const { container } = renderWithProvider(<BookDetail {...props} />);
     const reviews = container.querySelectorAll(
-      '[data-test="reviews-container"] .review'
+      '[data-test="reviews-container"] [data-test="review-name"]'
     );
     expect(reviews.length).toBe(2);
     expect(reviews[0].innerHTML).toEqual("Juntao");

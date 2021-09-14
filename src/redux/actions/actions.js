@@ -10,7 +10,7 @@ export function fetchBooks() {
       const { data } = await axios.get(
         `${config.endpoint}/books${term ? `?q=${term}` : ""}`
       );
-      dispatch({ type: types.FETCH_BOOKS_SUCCESS, books: data });
+      dispatch({ type: types.FETCH_BOOKS_SUCCESS, books: data.books });
     } catch (error) {
       dispatch({ type: types.FETCH_BOOKS_FAILED, error: error.message });
     }
@@ -31,7 +31,7 @@ export function fetchABook(id) {
     dispatch({ type: types.FETCH_CURRENT_BOOK_PENDING });
     try {
       const { data } = await axios.get(`${config.endpoint}/books/${id}`);
-      dispatch({ type: types.FETCH_CURRENT_BOOK_SUCCESS, book: data });
+      dispatch({ type: types.FETCH_CURRENT_BOOK_SUCCESS, book: data.book });
     } catch (error) {
       dispatch({ type: types.FETCH_CURRENT_BOOK_FAILED, error: error.message });
     }
@@ -39,5 +39,16 @@ export function fetchABook(id) {
 }
 
 export function postReview(bookId, review) {
-  return async dispatch => {};
+  return async dispatch => {
+    dispatch({ type: types.POST_BOOK_REVIEW_PENDING });
+    try {
+      const { data } = await axios.post(
+        `${config.endpoint}/books/${bookId}`,
+        review
+      );
+      dispatch({ type: types.POST_BOOK_REVIEW_SUCCESS, review: data.review });
+    } catch (error) {
+      dispatch({ type: types.POST_BOOK_REVIEW_FAILED, error: error.message });
+    }
+  };
 }

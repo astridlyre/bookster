@@ -1,10 +1,11 @@
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { postReview } from "../redux/actions/actions.js";
 import { TextField, Button, Typography } from "@material-ui/core";
 import { makeStyles, alpha } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginTop: theme.spacing(8),
     display: "flex",
     flexFlow: "column nowrap",
     alignItems: "flex-start",
@@ -22,14 +23,13 @@ const useStyles = makeStyles(theme => ({
 export default function ReviewForm({ bookId }) {
   const formRef = useRef();
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const handleSubmit = event => {
     event.preventDefault();
-    const formData = Object.fromEntries([...new FormData(formRef.current)]);
+    const review = Object.fromEntries([...new FormData(formRef.current)]);
     formRef.current.reset();
-    console.log({
-      id: bookId,
-      formData,
-    });
+    return dispatch(postReview(bookId, review));
   };
   return (
     <form
@@ -58,7 +58,7 @@ export default function ReviewForm({ bookId }) {
         margin="normal"
         fullWidth
         required
-        inputProps={{ name: "review" }}
+        inputProps={{ name: "content" }}
       />
       <Button
         variant="contained"

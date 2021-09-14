@@ -1,8 +1,9 @@
+const fs = require("fs");
 const jsonServer = require("json-server");
 const url = require("url");
 
 const server = jsonServer.create();
-const router = jsonServer.router("./db.json");
+const router = jsonServer.router("./stub-server/db.json");
 const middlewares = jsonServer.defaults();
 
 const _ = require("lodash");
@@ -50,7 +51,8 @@ const relations = {
 server.use((req, res, next) => {
   if (req.method === "DELETE" && req.query["_cleanup"]) {
     const db = router.db;
-    db.set("books", []).write();
+    const defaults = fs.readFileSync("./stub-server/books.json", "utf-8");
+    db.set("books", JSON.parse(defaults).books).write();
 
     if (relations[req.entity]) {
       db.set(relations[req.entity], []).write();

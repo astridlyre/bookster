@@ -17,7 +17,7 @@ describe("BookDetailContainer", () => {
     const mock = new MockAdapter(axios);
     mock
       .onGet(`${config.endpoint}/books/${props.match.params.id}`)
-      .reply(200, testBooks[2]);
+      .reply(200, { book: testBooks[2] });
     const { findByText } = renderWithRouterAndProvider(
       <BookDetailContainer {...props} />
     );
