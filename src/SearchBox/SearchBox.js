@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { searchTermSelector } from "../redux/selector.js";
 import { useHistory, useLocation } from "react-router-dom";
 import { alpha, makeStyles } from "@material-ui/core/styles";
-import { InputBase } from "@material-ui/core";
+import { InputBase, CircularProgress } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import { isEmpty, clone } from "lodash";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,36 +49,42 @@ export default function SearchBox({ handleSearch }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const [isSearching, setIsSearching] = useState(false);
   const term = useSelector(searchTermSelector);
 
+  const startSearching = () => setTimeout(() => setIsSearching(null), 250);
+
   const protect = event => {
-    const value = clone(event.target.value);
-    if (!isEmpty(value.trim()) || value.length === 0) {
-      if (location.pathname !== "/") {
-        history.push("/");
-        return handleSearch(event.target.value);
-      }
-      return handleSearch(event.target.value);
+    if (isSearching) {
+      clearTimeout(isSearching);
     }
+    if (event.target.value === " ") return;
+    setIsSearching(startSearching());
+    const value = event.target.value.trim();
+    if (location.pathname !== "/") history.push("/");
+    handleSearch(value);
   };
 
   return (
-    <div className={classes.root}>
-      <div className={classes.searchIcon}>
-        <SearchIcon />
+    <>
+      <div className={classes.root}>
+        <div className={classes.searchIcon}>
+          <SearchIcon />
+        </div>
+        <InputBase
+          placeholder="Search..."
+          title="Search for a book"
+          value={term.value}
+          data-test="search"
+          onChange={protect}
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          inputProps={{ "aria-label": "search" }}
+        />
       </div>
-      <InputBase
-        placeholder="Search..."
-        title="Search for a book"
-        value={term}
-        data-test="search"
-        onChange={protect}
-        classes={{
-          root: classes.inputRoot,
-          input: classes.inputInput,
-        }}
-        inputProps={{ "aria-label": "search" }}
-      />
-    </div>
+      {isSearching && <CircularProgress size="2rem" color="secondary" />}
+    </>
   );
 }

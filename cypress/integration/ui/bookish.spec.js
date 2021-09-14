@@ -6,10 +6,10 @@ import axios from "axios";
 // check out the link below and learn how to write your first test:
 // https://on.cypress.io/writing-first-test
 const APP_URL = "http://localhost:3000";
-const API_URL = "http://localhost:4000";
+const API_URL = "http://localhost:4000/api";
 
 async function cleanup() {
-  await axios.delete(`${API_URL}?_cleanup=true`);
+  await axios.delete(`${API_URL}/books`);
 }
 
 function goToApp() {
@@ -30,11 +30,11 @@ function checkBookListWith(expectation = []) {
 }
 
 function gotoNthBookInTheList(n) {
-  cy.get("div.book-item").contains("View Details").eq(n).click();
+  cy.get("div.book-item").eq(n).contains("View Details").click();
 }
 
-function checkBookDetail(expected) {
-  cy.url().should("include", "/books/1");
+function checkBookDetail(expected, n) {
+  cy.url().should("include", `/books/${n}`);
   cy.get("h1.book-title").contains(expected);
 }
 
@@ -43,6 +43,10 @@ function searchFor(term) {
 }
 
 describe("Bookster application", function () {
+  before(async () => {
+    await cleanup();
+  });
+
   beforeEach(() => {
     goToApp();
   });
@@ -62,7 +66,7 @@ describe("Bookster application", function () {
 
   it("Goes to the detail page", () => {
     gotoNthBookInTheList(0);
-    checkBookDetail("Refactoring");
+    checkBookDetail("Refactoring", 1);
   });
 
   it("Searches for a title", () => {
@@ -78,12 +82,12 @@ describe("Bookster application", function () {
 
   it("Writes a review for a book", () => {
     gotoNthBookInTheList(1);
-    checkBookDetail("Building Microservices");
+    checkBookDetail("Building Microservices", 2);
 
     cy.get('input[name="name"]').type("Juntao Qui");
     cy.get('textarea[name="content"]').type("Excellent work!");
     cy.get('button[name="submit"]').click();
-    cy.get('div[data-test="reviews-container"] .review').should(
+    cy.get('[data-test="reviews-container"] [data-test="review"]').should(
       "have.length",
       1
     );

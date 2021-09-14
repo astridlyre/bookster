@@ -15,7 +15,9 @@ const initialState = {
       reviews: [],
     },
   },
-  term: "",
+  term: {
+    value: "",
+  },
 };
 
 const middlewares = [thunk];

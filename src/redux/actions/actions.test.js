@@ -11,14 +11,14 @@ const mockStore = configureMockStore(middlewares);
 
 describe("BookListContainer related actions", () => {
   it("Sets the search keyword", () => {
-    const term = "";
+    const term = { value: "" };
     const expected = [
       {
         type: types.SET_SEARCH_TERM,
         term,
       },
     ];
-    const store = mockStore({ books: { list: [] }, term: "hello" });
+    const store = mockStore({ books: { list: [] }, term: { value: "hello" } });
     return store.dispatch(actions.setSearchTerm(term)).then(() => {
       expect(store.getActions()).toEqual(expected);
     });
@@ -34,7 +34,7 @@ describe("BookListContainer related actions", () => {
       { type: types.FETCH_BOOKS_PENDING },
       { type: types.FETCH_BOOKS_SUCCESS, books: testBooks },
     ];
-    const store = mockStore({ books: { list: [] } });
+    const store = mockStore({ books: { list: [] }, term: { value: "" } });
     return store.dispatch(actions.fetchBooks()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
@@ -50,7 +50,7 @@ describe("BookListContainer related actions", () => {
       { type: types.FETCH_BOOKS_PENDING },
       { type: types.FETCH_BOOKS_FAILED, error: "Something went wrong" },
     ];
-    const store = mockStore({ books: { list: [] } });
+    const store = mockStore({ books: { list: [] }, term: { value: "" } });
     return store.dispatch(actions.fetchBooks()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
@@ -67,7 +67,7 @@ describe("BookListContainer related actions", () => {
       .mockImplementation(() =>
         Promise.resolve({ data: { books: testBooks } })
       );
-    const store = mockStore({ books: { list: [] }, term: "" });
+    const store = mockStore({ books: { list: [] }, term: { value: "" } });
     store
       .dispatch(actions.setSearchTerm("driven"))
       .then(() => {
@@ -118,7 +118,7 @@ describe("BookListContainer related actions", () => {
     axios.post = jest
       .fn()
       .mockImplementation(() => Promise.resolve({ data: { review } }));
-    const store = mockStore({ books: { list: [] }, term: "" });
+    const store = mockStore({ books: { list: [] }, term: { value: "" } });
     return store.dispatch(actions.postReview(review)).then(() => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(

@@ -13,10 +13,10 @@ export function booksReducer(state = [], action) {
   }
 }
 
-export function searchReducer(state = "", action) {
+export function searchReducer(state = {}, action) {
   switch (action.type) {
     case types.SET_SEARCH_TERM:
-      return action.term;
+      return { ...state, value: action.term };
     default:
       return state;
   }

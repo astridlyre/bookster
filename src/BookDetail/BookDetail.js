@@ -1,4 +1,4 @@
-import { Grid, Box, Typography, Container, Paper } from "@material-ui/core";
+import { Box, Typography, Container, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import Loader from "../Loader/Loader.js";

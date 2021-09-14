@@ -5,7 +5,7 @@ import SearchBox from "./SearchBox";
 describe("SearchBox", () => {
   it("renders input", () => {
     const props = {
-      term: "",
+      term: { value: "" },
       handleSearch: jest.fn(),
     };
     const { container } = renderWithRouterAndProvider(<SearchBox {...props} />);
@@ -16,12 +16,12 @@ describe("SearchBox", () => {
 
   it("trims empty strings", () => {
     const props = {
-      term: "",
-      onSearch: jest.fn(),
+      term: { value: "" },
+      handleSearch: jest.fn(),
     };
     const { container } = renderWithRouterAndProvider(<SearchBox {...props} />);
     const input = container.querySelector('input[type="text"]');
     userEvent.type(input, "   ");
-    expect(props.onSearch).not.toHaveBeenCalled();
+    expect(props.handleSearch).not.toHaveBeenCalled();
   });
 });

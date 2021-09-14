@@ -18,7 +18,7 @@ export default function Review({ review }) {
   const classes = useStyles();
 
   return (
-    <Bubble className={`${classes.root} review`}>
+    <Bubble className={classes.root} dataTest="review">
       <Typography variant="body2" component="p" data-test="review-content">
         {review.content}
       </Typography>

@@ -8,7 +8,7 @@ export function fetchBooks() {
     const { term } = getState();
     try {
       const { data } = await axios.get(
-        `${config.endpoint}/books${term ? `?q=${term}` : ""}`
+        `${config.endpoint}/books${term.value ? `?q=${term.value}` : ""}`
       );
       dispatch({ type: types.FETCH_BOOKS_SUCCESS, books: data.books });
     } catch (error) {

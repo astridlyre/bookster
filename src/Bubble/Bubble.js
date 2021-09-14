@@ -10,8 +10,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Bubble({ children }) {
+export default function Bubble({ dataTest, className, children }) {
   const classes = useStyles();
 
-  return <Box className={classes.root}>{children}</Box>;
+  return (
+    <Box className={`${classes.root} ${className}`} data-test={dataTest}>
+      {children}
+    </Box>
+  );
 }
