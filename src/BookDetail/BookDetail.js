@@ -33,8 +33,8 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "flex-start",
     [theme.breakpoints.down("xs")]: {
-      marginTop: theme.spacing(0),
-      flexFlow: "column nowrap",
+      marginTop: theme.spacing(4),
+      flexFlow: "column-reverse nowrap",
       alignItems: "center",
     },
     gap: theme.spacing(4),
@@ -68,43 +68,41 @@ export default function BookDetail({ book, loading, error }) {
   }
 
   return (
-    <Grid item className={`${classes.root} detail`}>
-      <Container maxWidth="md">
-        <Paper elevation={1} className={classes.paper}>
-          <Typography
-            variant="h2"
-            component="h1"
-            className="book-title"
-            gutterBottom
-          >
-            {book.title}
-          </Typography>
-          <Box className={classes.page}>
-            <img src={book.image} alt={book.title} className={classes.img} />
-            <Box>
-              <Typography
-                variant="body2"
-                component="p"
-                className="book-description"
+    <Container maxWidth="md" className="detail">
+      <Paper elevation={1} className={classes.paper}>
+        <Typography
+          variant="h2"
+          component="h1"
+          className="book-title"
+          gutterBottom
+        >
+          {book.title}
+        </Typography>
+        <Box className={classes.page}>
+          <img src={book.image} alt={book.title} className={classes.img} />
+          <Box>
+            <Typography
+              variant="body2"
+              component="p"
+              className="book-description"
+            >
+              {textToShow}
+            </Typography>
+            {getDescriptionFor(book).length > 300 && (
+              <button
+                className={`${classes.link} show-more`}
+                onClick={() => setShowFull(s => !s)}
               >
-                {textToShow}
-              </Typography>
-              {getDescriptionFor(book).length > 300 && (
-                <button
-                  className={`${classes.link} show-more`}
-                  onClick={() => setShowFull(s => !s)}
-                >
-                  Show more
-                </button>
-              )}
-            </Box>
+                Show more
+              </button>
+            )}
           </Box>
-          <Box className={classes.page}>
-            <ReviewList bookId={book.id} reviews={book.reviews} />
-            <ReviewForm bookId={book.id} />
-          </Box>
-        </Paper>
-      </Container>
-    </Grid>
+        </Box>
+        <Box className={classes.page}>
+          <ReviewList bookId={book.id} reviews={book.reviews} />
+          <ReviewForm bookId={book.id} />
+        </Box>
+      </Paper>
+    </Container>
   );
 }
