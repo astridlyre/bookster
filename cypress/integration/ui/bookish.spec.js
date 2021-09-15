@@ -43,8 +43,8 @@ function searchFor(term) {
 }
 
 describe("Bookster application", function () {
-  before(async () => {
-    await cleanup();
+  before(() => {
+    cleanup();
   });
 
   beforeEach(() => {

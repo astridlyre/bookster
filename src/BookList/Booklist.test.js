@@ -63,7 +63,7 @@ describe("Booklist", () => {
     );
     const link = container.querySelector(".show-more");
     const description = container.querySelector(".book-description");
-    expect(link.innerHTML).toEqual("(more)");
+    expect(link.innerHTML).toEqual("Show more");
     expect(description.textContent).toEqual(props.books[0].description);
   });
 });

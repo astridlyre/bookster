@@ -27,7 +27,7 @@ export const testBooks = [
     title: "Refactoring",
     image: "",
     description:
-      "The book about how to do refactoring with a very long title that has a lot of ch... (more)",
+      "The book about how to do refactoring with a very long title that has a lot of ch... Show more",
     reviews: [
       {
         name: "Juntao",

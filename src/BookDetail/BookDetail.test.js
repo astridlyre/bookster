@@ -60,7 +60,7 @@ describe("BookDetail", () => {
       book: {
         name: "Refactoring",
         description:
-          "The book about how to do refactoring with a very long title that has a lot of characters, so if you want to read it you have to click view more, otherwise it will be hidden, isn't that great? The book about how to do refactoring with a very long title that has a lot of characters, so if you want to ...",
+          "The book about how to do refactoring with a very long title that has a lot of characters, so if you want to read it you have to click view more, otherwise it will be hidden, isn't that great? The book about how to do refactoring with a very long title that has a lot of characters, so if you want to ... Show more",
         id: 1,
       },
     };
@@ -68,7 +68,7 @@ describe("BookDetail", () => {
     const link = container.querySelector(".show-more");
     const description = container.querySelector(".book-description");
     expect(link.innerHTML).toEqual("Show more");
-    expect(description.innerHTML).toEqual(props.book.description);
+    expect(description.textContent).toEqual(props.book.description);
   });
 
   it("renders reviews", () => {

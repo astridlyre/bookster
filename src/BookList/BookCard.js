@@ -8,9 +8,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { withBookSelector } from "../redux/selector.js";
+import SizeLimitedText from "../Text/SizeLimitedText.js";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,10 +33,14 @@ const useStyles = makeStyles(theme => ({
     cursor: "pointer",
     background: "none",
     border: "none",
-    padding: 0,
+    padding: theme.spacing(0.25),
     fontFamily: theme.typography.fontFamily,
-    outlineColor: theme.palette.secondary.main,
+    outline: "none",
     display: "inline",
+    "&:hover, &:focus": {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.primary.contrastText,
+    },
   },
   img: {
     height: "8rem",
@@ -48,16 +52,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function BookCard({ bookId }) {
   const classes = useStyles();
-  const [showFull, setShowFull] = useState(false);
   const history = useHistory();
   const book = useSelector(withBookSelector(bookId));
 
-  const getDescriptionFor = book => {
-    let text = book.description || book.title;
-    if (!text) text = "";
-    if (showFull || text.length < 80) return text;
-    return `${text.substring(0, 80)}... `;
-  };
   const goToBook = () => history.push(`/books/${book.id}`);
 
   return (
@@ -73,23 +70,11 @@ export default function BookCard({ bookId }) {
             {book.title}
           </Typography>
           <img src={book.image} alt={book.title} className={classes.img} />
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-            className="book-description"
-          >
-            {getDescriptionFor(book)}
-            {book?.description?.length > 80 && (
-              <button
-                title={showFull ? "Show less" : "Show more"}
-                className={`${classes.showMore} show-more`}
-                onClick={() => setShowFull(s => !s)}
-              >
-                {showFull ? "(less)" : "(more)"}
-              </button>
-            )}
-          </Typography>
+          <SizeLimitedText
+            text={book.description || book.title || ""}
+            textProps={{ className: "book-description" }}
+            size={80}
+          />
         </CardContent>
         <CardActions>
           <Button

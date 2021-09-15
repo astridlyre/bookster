@@ -1,22 +1,14 @@
 import { Box, Typography, Container, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useState } from "react";
 import Loader from "../Loader/Loader.js";
 import ReviewList from "../ReviewList/ReviewList.js";
 import ReviewForm from "../ReviewForm/ReviewForm.js";
+import SizeLimitedText from "../Text/SizeLimitedText.js";
 
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(2),
     marginBottom: theme.spacing(4),
-  },
-  link: {
-    textDecoration: "none",
-    color: "#8f8f8f",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    padding: 0,
   },
   paper: {
     padding: theme.spacing(4),
@@ -43,17 +35,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function BookDetail({ book, loading, error }) {
   const classes = useStyles();
-  const [showFull, setShowFull] = useState(false);
-
-  const getDescriptionFor = book =>
-    book?.description ? book.description : book?.title ? book.title : "";
-
-  const textToShow =
-    getDescriptionFor(book).length > 300
-      ? showFull
-        ? getDescriptionFor(book)
-        : `${getDescriptionFor(book).substring(0, 300)}...`
-      : getDescriptionFor(book);
 
   if (error) {
     return (
@@ -80,23 +61,11 @@ export default function BookDetail({ book, loading, error }) {
         </Typography>
         <Box className={classes.page}>
           <img src={book.image} alt={book.title} className={classes.img} />
-          <Box>
-            <Typography
-              variant="body2"
-              component="p"
-              className="book-description"
-            >
-              {textToShow}
-            </Typography>
-            {getDescriptionFor(book).length > 300 && (
-              <button
-                className={`${classes.link} show-more`}
-                onClick={() => setShowFull(s => !s)}
-              >
-                Show more
-              </button>
-            )}
-          </Box>
+          <SizeLimitedText
+            size={300}
+            text={book.description || book.title || ""}
+            textProps={{ className: "book-description" }}
+          />
         </Box>
         <Box className={classes.page}>
           <ReviewList bookId={book.id} reviews={book.reviews} />
