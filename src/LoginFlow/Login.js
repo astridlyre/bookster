@@ -7,7 +7,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { makeStyles, alpha } from "@material-ui/core/styles";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../redux/actions/actions.js";
 

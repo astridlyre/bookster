@@ -18,7 +18,7 @@ export default function LoginContainer() {
     if (!currentUser.loggedIn) {
       dispatch(getProfile());
     }
-  }, [currentUser]);
+  }, [currentUser, dispatch]);
 
   useEffect(() => {
     if (currentUser.loggedIn) {
