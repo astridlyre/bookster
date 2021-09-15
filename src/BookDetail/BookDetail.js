@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { Box, Typography, Container, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader/Loader.js";
 import ReviewList from "../ReviewList/ReviewList.js";
 import ReviewForm from "../ReviewForm/ReviewForm.js";
 import SizeLimitedText from "../Text/SizeLimitedText.js";
+import config from "../config.js";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,6 +37,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function BookDetail({ book, loading, error }) {
   const classes = useStyles();
+
+  useEffect(() => {
+    document.title = book
+      ? `${book.title} | ${config.siteName}`
+      : config.siteName;
+  }, [book]);
 
   if (error) {
     return (

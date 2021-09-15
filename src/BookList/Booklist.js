@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { Grid, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import BookCard from "./BookCard.js";
 import Loader from "../Loader/Loader.js";
+import config from "../config.js";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,6 +17,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function Booklist({ books, loading, error }) {
   const classes = useStyles();
+
+  useEffect(() => {
+    document.title = config.siteName;
+  }, []);
 
   if (error) {
     return <p data-test="error-message">an Error has occured</p>;

@@ -42,6 +42,25 @@ function searchFor(term) {
   cy.get('[data-test="search"] input').type(term);
 }
 
+function composeReview(name, content) {
+  cy.get('input[name="name"]').type(name);
+  cy.get('textarea[name="content"]').type(content);
+  cy.get('button[name="submit"]').click();
+}
+
+function checkReview(expected) {
+  cy.get('[data-test="reviews-container"] [data-test="review"]').should(
+    "have.length",
+    1
+  );
+  cy.get('[data-test="reviews-container"] [data-test="review"]').contains(
+    expected.name
+  );
+  cy.get('[data-test="reviews-container"] [data-test="review"]').contains(
+    expected.content
+  );
+}
+
 describe("Bookster application", function () {
   before(() => {
     cleanup();
@@ -83,13 +102,10 @@ describe("Bookster application", function () {
   it("Writes a review for a book", () => {
     gotoNthBookInTheList(1);
     checkBookDetail("Building Microservices", 2);
-
-    cy.get('input[name="name"]').type("Juntao Qui");
-    cy.get('textarea[name="content"]').type("Excellent work!");
-    cy.get('button[name="submit"]').click();
-    cy.get('[data-test="reviews-container"] [data-test="review"]').should(
-      "have.length",
-      1
-    );
+    composeReview("Juntao Qiu", "Excellent work!");
+    checkReview({
+      name: "Juntao Qiu",
+      content: "Excellent work!",
+    });
   });
 });

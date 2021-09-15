@@ -5,22 +5,27 @@ import "@testing-library/jest-dom";
 describe("ReviewList", () => {
   it("renders an empty list", () => {
     const props = {
-      bookId: 1,
+      reviews: [],
     };
     const { container } = renderWithProvider(<ReviewList {...props} />);
     const reviews = container.querySelector('[data-test="reviews-container"]');
     expect(reviews).toBeInTheDocument();
   });
 
-  it("renders a list when data is passed", () => {
+  it("renders a list when data is passed", async () => {
     const props = {
       reviews: testReviews,
     };
-    const { container } = renderWithProvider(<ReviewList {...props} />);
+    const { container, findByText } = renderWithProvider(
+      <ReviewList {...props} />
+    );
     const reviews = container.querySelectorAll(
-      '[data-test="reviews-container"] [data-test="review-name"]'
+      '[data-test="reviews-container"] [data-test="review"]'
     );
     expect(reviews.length).toBe(2);
-    expect(reviews[0].innerHTML).toEqual(testReviews[0].name);
+    const name = await findByText(testReviews[0].name);
+    const content = await findByText(testReviews[0].content);
+    expect(name).toBeInTheDocument();
+    expect(content).toBeInTheDocument();
   });
 });
