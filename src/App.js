@@ -9,9 +9,6 @@ import { currentUserSelector } from "./redux/selector.js";
 
 function App() {
   const currentUser = useSelector(currentUserSelector);
-
-  console.log(currentUser);
-
   return (
     <>
       {currentUser.loggedIn ? <Menu /> : <Bar />}
