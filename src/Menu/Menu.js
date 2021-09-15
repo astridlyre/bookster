@@ -30,9 +30,7 @@ export default function Menu() {
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const handleMenuClose = () => setAnchorEl(null);
   const handleProfileMenuOpen = event => setAnchorEl(event.currentTarget);
   const handleSearch = term => dispatch(setSearchTerm(term));
 

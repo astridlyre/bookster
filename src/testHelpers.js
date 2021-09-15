@@ -13,8 +13,12 @@ export function renderWithRouter(component) {
   return { ...render(<Router>{component}</Router>) };
 }
 
-export function renderWithProvider(component) {
-  return { ...render(<Provider store={store}>{component}</Provider>) };
+export function renderWithProvider(component, mockStore) {
+  return {
+    ...render(
+      <Provider store={mockStore ? mockStore : store}>{component}</Provider>
+    ),
+  };
 }
 
 export function renderWithRouterAndProvider(component, mockStore) {
