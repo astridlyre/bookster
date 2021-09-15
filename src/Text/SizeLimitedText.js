@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SizeLimitedText({ text, size, textProps }) {
+export default function SizeLimitedText({ text, size, textProps, variant }) {
   const classes = useStyles();
   const [showFull, setShowFull] = useState(false);
 
@@ -28,7 +28,7 @@ export default function SizeLimitedText({ text, size, textProps }) {
 
   return (
     <Box>
-      <Typography variant="body2" component="p" {...textProps}>
+      <Typography variant={variant} component="p" {...textProps}>
         {textToShow}
         {text.length > size && (
           <>

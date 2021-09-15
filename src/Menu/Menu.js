@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppBar, Toolbar, IconButton } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { AppBar, Toolbar, Button, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -9,6 +9,7 @@ import Heading from "./Heading.js";
 import UserActions from "./UserActions.js";
 import HideOnScroll from "./HideOnScroll.js";
 import { setSearchTerm } from "../redux/actions/actions.js";
+import { currentUserSelector } from "../redux/selector.js";
 import config from "../config.js";
 
 const useStyles = makeStyles(theme => ({
@@ -23,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 export default function Menu() {
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
+  const currentUser = useSelector(currentUserSelector);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -49,7 +51,7 @@ export default function Menu() {
             <Heading text={config.siteName} />
             <SearchBox handleSearch={handleSearch} />
             <div className={classes.grow} />
-            <IconButton
+            <Button
               edge="end"
               aria-label="Account of current user"
               aria-controls={menuId}
@@ -57,9 +59,10 @@ export default function Menu() {
               onClick={handleProfileMenuOpen}
               color="inherit"
               data-test="user-actions"
+              startIcon={<AccountCircle />}
             >
-              <AccountCircle />
-            </IconButton>
+              {currentUser.username}
+            </Button>
           </Toolbar>
         </AppBar>
       </HideOnScroll>

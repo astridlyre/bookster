@@ -4,6 +4,7 @@ import {
   booksReducer,
   searchReducer,
   currentBookReducer,
+  currentUserReducer,
 } from "./redux/reducers/reducers.js";
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   term: {
     value: "",
   },
+  currentUser: {},
 };
 
 const middlewares = [thunk];
@@ -26,6 +28,7 @@ const reducers = combineReducers({
   term: searchReducer,
   books: booksReducer,
   currentBook: currentBookReducer,
+  currentUser: currentUserReducer,
 });
 const store = createStore(reducers, initialState, composedEnhancers);
 

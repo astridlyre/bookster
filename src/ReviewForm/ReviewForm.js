@@ -47,18 +47,9 @@ export default function ReviewForm({ bookId }) {
         Share Your Thoughts
       </Typography>
       <TextField
-        label="Name"
-        type="text"
-        variant="filled"
-        inputProps={{ name: "name" }}
-        margin="normal"
-        fullWidth
-        required
-      />
-      <TextField
         multiline
         variant="filled"
-        maxRows={4}
+        maxRows={6}
         label="Review"
         margin="normal"
         fullWidth

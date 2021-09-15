@@ -58,6 +58,10 @@ export function useStorage(key, defaultValue, storageObject) {
   return useMemo(() => [value, setValue, clear], [value, setValue, clear]);
 }
 
+export function useLocalStorage(key, defaultValue) {
+  return useStorage(key, defaultValue, window.localStorage);
+}
+
 export function useToggle(defaultValue) {
   const [value, setValue] = useState(defaultValue);
 

@@ -46,3 +46,22 @@ function addReview(book, review) {
     reviews: book.reviews.concat(review),
   };
 }
+
+export function currentUserReducer(state = {}, action) {
+  switch (action.type) {
+    case types.REGISTER_USER_SUCCESS:
+    case types.LOGIN_SUCCESS:
+      return {
+        ...action.user,
+        loggedIn: true,
+        status: types.STATUS_LOGGED_IN,
+      };
+    case types.REGISTER_USER_FAILED:
+    case types.LOGIN_FAILED:
+      return { loggedIn: false, status: types.STATUS_FAILED };
+    case types.LOGOUT_USER:
+      return { loggedIn: false, status: types.STATUS_LOGGED_OUT };
+    default:
+      return state;
+  }
+}

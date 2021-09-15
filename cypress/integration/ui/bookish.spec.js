@@ -7,9 +7,25 @@ import axios from "axios";
 // https://on.cypress.io/writing-first-test
 const APP_URL = "http://localhost:3000";
 const API_URL = "http://localhost:4000/api";
+const TEST_CREDENTIALS = {
+  username: "juntao",
+  password: "123456",
+};
+const TEST_REGISTER_CREDENTIALS = {
+  username: "harold",
+  email: "harold@email.com",
+  password: "123456",
+  confirmPassword: "123456",
+};
 
 async function cleanup() {
   await axios.delete(`${API_URL}/books`);
+}
+
+function login(credentials) {
+  cy.get('[data-test="login-username"]').type(credentials.username);
+  cy.get('[data-test="login-password"]').type(credentials.password);
+  cy.get('[data-test="login-submit"]').click();
 }
 
 function goToApp() {
@@ -42,8 +58,7 @@ function searchFor(term) {
   cy.get('[data-test="search"] input').type(term);
 }
 
-function composeReview(name, content) {
-  cy.get('input[name="name"]').type(name);
+function composeReview(content) {
   cy.get('textarea[name="content"]').type(content);
   cy.get('button[name="submit"]').click();
 }
@@ -61,6 +76,26 @@ function checkReview(expected) {
   );
 }
 
+function createAccount(credentials) {
+  cy.get('[data-test="register-button"]').click();
+  cy.get('[data-test="register-username').type(credentials.username);
+  cy.get('[data-test="register-email"]').type(credentials.email);
+  cy.get('[data-test="register-password"]').type(credentials.password);
+  cy.get('[data-test="register-confirm-password"]').type(
+    credentials.confirmPassword
+  );
+  cy.get('[data-test="register-submit"]').click();
+}
+
+function logout() {
+  cy.get('[data-test="user-actions"]').click();
+  cy.get('[data-test="user-actions-logout').click();
+}
+
+function checkLoginForm() {
+  cy.get('[data-test="login-submit');
+}
+
 describe("Bookster application", function () {
   before(() => {
     cleanup();
@@ -75,6 +110,7 @@ describe("Bookster application", function () {
   });
 
   it("Shows a book list", () => {
+    login(TEST_CREDENTIALS);
     checkBookListWith([
       "Refactoring",
       "Building Microservices",
@@ -84,11 +120,13 @@ describe("Bookster application", function () {
   });
 
   it("Goes to the detail page", () => {
+    login(TEST_CREDENTIALS);
     gotoNthBookInTheList(0);
     checkBookDetail("Refactoring", 1);
   });
 
   it("Searches for a title", () => {
+    login(TEST_CREDENTIALS);
     checkBookListWith([
       "Refactoring",
       "Building Microservices",
@@ -100,12 +138,40 @@ describe("Bookster application", function () {
   });
 
   it("Writes a review for a book", () => {
+    login(TEST_CREDENTIALS);
     gotoNthBookInTheList(1);
     checkBookDetail("Building Microservices", 2);
-    composeReview("Juntao Qiu", "Excellent work!");
+    composeReview("Excellent work!");
     checkReview({
-      name: "Juntao Qiu",
+      name: TEST_CREDENTIALS.username,
       content: "Excellent work!",
     });
+  });
+
+  it("Doesn't submit a review with missing content", () => {
+    login(TEST_CREDENTIALS);
+    gotoNthBookInTheList(1);
+    checkBookDetail("Building Microservices", 2);
+    cy.get('button[name="submit"]').click();
+    cy.get('[data-test="reviews-container"] [data-test="review"]').should(
+      "have.length",
+      1
+    );
+  });
+
+  it("Can create a new account", () => {
+    createAccount(TEST_REGISTER_CREDENTIALS);
+    checkBookListWith([
+      "Refactoring",
+      "Building Microservices",
+      "Test-Driven Development By Example",
+      "Mastering React Test-Driven Development",
+    ]);
+  });
+
+  it("Can logout", () => {
+    login(TEST_CREDENTIALS);
+    logout();
+    checkLoginForm();
   });
 });

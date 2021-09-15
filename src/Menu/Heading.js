@@ -28,6 +28,7 @@ export default function Heading({ text }) {
         className={classes.iconButton}
         title="Home page"
         onClick={goHome}
+        data-test="heading"
       >
         <BookIcon />
       </IconButton>

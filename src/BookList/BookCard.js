@@ -74,6 +74,7 @@ export default function BookCard({ bookId }) {
             text={book.description || book.title || ""}
             textProps={{ className: "book-description" }}
             size={80}
+            variant="body2"
           />
         </CardContent>
         <CardActions>

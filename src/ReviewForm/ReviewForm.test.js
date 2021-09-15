@@ -9,11 +9,9 @@ describe("ReviewForm", () => {
     };
     const { container } = renderWithProvider(<ReviewForm {...props} />);
     const form = container.querySelector("form");
-    const nameInput = container.querySelector('input[name="name"]');
     const contentTextArea = container.querySelector('textarea[name="content"]');
     const submitButton = container.querySelector('button[name="submit"]');
     expect(form).toBeInTheDocument();
-    expect(nameInput).toBeInTheDocument();
     expect(contentTextArea).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
   });

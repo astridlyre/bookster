@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     marginBottom: theme.spacing(4),
   },
+  title: {
+    marginTop: theme.spacing(4),
+  },
   paper: {
     padding: theme.spacing(4),
   },
@@ -23,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     objectFit: "contain",
   },
   page: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(6),
     display: "flex",
     alignItems: "flex-start",
     [theme.breakpoints.down("xs")]: {
@@ -62,7 +65,7 @@ export default function BookDetail({ book, loading, error }) {
         <Typography
           variant="h2"
           component="h1"
-          className="book-title"
+          className={`${classes.title} book-title`}
           gutterBottom
         >
           {book.title}
@@ -73,6 +76,7 @@ export default function BookDetail({ book, loading, error }) {
             size={300}
             text={book.description || book.title || ""}
             textProps={{ className: "book-description" }}
+            variant="body1"
           />
         </Box>
         <Box className={classes.page}>

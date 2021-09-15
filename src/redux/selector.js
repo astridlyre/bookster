@@ -22,3 +22,5 @@ export const searchTermSelector = state => state.term;
 
 export const withBookSelector = id => state =>
   state.books.list.find(book => book.id === id) || {};
+
+export const currentUserSelector = state => state.currentUser;
