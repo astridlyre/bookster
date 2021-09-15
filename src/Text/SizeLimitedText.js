@@ -28,7 +28,12 @@ export default function SizeLimitedText({ text, size, textProps, variant }) {
 
   return (
     <Box>
-      <Typography variant={variant} component="p" {...textProps}>
+      <Typography
+        variant={variant}
+        data-test="size-limited-text"
+        component="p"
+        {...textProps}
+      >
         {textToShow}
         {text.length > size && (
           <>
@@ -36,6 +41,7 @@ export default function SizeLimitedText({ text, size, textProps, variant }) {
             <button
               className={`${classes.link} show-more`}
               onClick={() => setShowFull(s => !s)}
+              data-test="show-more"
             >
               {showFull ? "Show less" : "Show more"}
             </button>

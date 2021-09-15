@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "esm",
+    "target": "es9"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -13,6 +13,10 @@ import { currentUserSelector } from "../redux/selector.js";
 import config from "../config.js";
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
   grow: {
     flexGrow: 1,
   },
@@ -38,7 +42,7 @@ export default function Menu() {
   return (
     <>
       <HideOnScroll>
-        <AppBar position="sticky" color="primary">
+        <AppBar position="sticky" color="primary" className={classes.root}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -50,8 +54,9 @@ export default function Menu() {
             </IconButton>
             <Heading text={config.siteName} />
             <SearchBox handleSearch={handleSearch} />
-            <div className={classes.grow} />
+            <div className={classes.grow}></div>
             <Button
+              className={classes.button}
               edge="end"
               aria-label="Account of current user"
               aria-controls={menuId}

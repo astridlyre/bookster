@@ -76,7 +76,7 @@ describe("BookListContainer related actions", () => {
           expect(actions).toEqual(expectedActions);
         });
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   });
 
   it("Fetches book", () => {
@@ -123,11 +123,105 @@ describe("BookListContainer related actions", () => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(
         `${config.endpoint}/reviews/create`,
-        review
+        review,
       );
       expect(actions).toEqual([
         { type: types.POST_BOOK_REVIEW_PENDING },
         { type: types.POST_BOOK_REVIEW_SUCCESS, review },
+      ]);
+    });
+  });
+
+  it("logs in a user", () => {
+    const credentials = {
+      username: "juntao",
+      password: "123456",
+    };
+    axios.post = jest
+      .fn()
+      .mockImplementation(() =>
+        Promise.resolve({ data: { user: credentials }, token: "hello" })
+      );
+    const store = mockStore({ currentUser: {} });
+    return store.dispatch(actions.loginUser(credentials)).then(() => {
+      const actions = store.getActions();
+      expect(axios.post).toHaveBeenCalledWith(
+        `${config.endpoint}/users/login`,
+        credentials,
+      );
+      expect(actions).toEqual([
+        { type: types.LOGIN_SUCCESS, user: credentials },
+      ]);
+    });
+  });
+
+  it("handles login error", () => {
+    const credentials = {
+      username: "juntao",
+      password: "123456",
+    };
+    axios.post = jest
+      .fn()
+      .mockImplementation(() =>
+        Promise.reject({ error: { message: "Something went wrong" } })
+      );
+    const store = mockStore({ currentUser: {} });
+    return store.dispatch(actions.loginUser(credentials)).then(() => {
+      const actions = store.getActions();
+      expect(axios.post).toHaveBeenCalledWith(
+        `${config.endpoint}/users/login`,
+        credentials,
+      );
+      expect(actions).toEqual([{ type: types.LOGIN_FAILED }]);
+    });
+  });
+
+  it("registers a user", () => {
+    const credentials = {
+      username: "harvey",
+      email: "harvey@email.com",
+      password: "123456",
+      confirmPassword: "123456",
+    };
+    axios.post = jest
+      .fn()
+      .mockImplementation(() =>
+        Promise.resolve({ data: { user: credentials, token: "hello" } })
+      );
+    const store = mockStore({ currentUser: {} });
+    return store.dispatch(actions.registerUser(credentials)).then(() => {
+      const actions = store.getActions();
+      expect(axios.post).toHaveBeenCalledWith(
+        `${config.endpoint}/users/register`,
+        credentials,
+      );
+      expect(actions).toEqual([
+        { type: types.REGISTER_USER_SUCCESS, user: credentials },
+      ]);
+    });
+  });
+
+  it("handles register error", () => {
+    const credentials = {
+      username: "harvey",
+      email: "harvey@email.com",
+      password: "123456",
+      confirmPassword: "123456",
+    };
+    axios.post = jest
+      .fn()
+      .mockImplementation(() =>
+        Promise.reject({ error: { message: "Something went wrong" } })
+      );
+    const store = mockStore({ currentUser: {} });
+    return store.dispatch(actions.registerUser(credentials)).then(() => {
+      const actions = store.getActions();
+      expect(axios.post).toHaveBeenCalledWith(
+        `${config.endpoint}/users/register`,
+        credentials,
+      );
+      expect(actions).toEqual([
+        { type: types.REGISTER_USER_FAILED },
       ]);
     });
   });

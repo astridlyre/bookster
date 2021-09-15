@@ -2,6 +2,12 @@ import { render } from "@testing-library/react";
 import { MemoryRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store.js";
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+export const createMockStore = (...args) => mockStore(...args);
 
 export function renderWithRouter(component) {
   return { ...render(<Router>{component}</Router>) };
@@ -77,3 +83,6 @@ export const testReviews = [
     createdAt: new Date().toISOString(),
   },
 ];
+
+export const findByDataTest = (container, key) =>
+  container.querySelector(`[data-test="${key}"]`);
