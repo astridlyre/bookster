@@ -120,3 +120,18 @@ export function postReview(review) {
     }
   };
 }
+
+export function updateReview(review) {
+  return async dispatch => {
+    dispatch({ type: types.UPDATE_BOOK_REVIEW_PENDING });
+    try {
+      const { data } = await axios.post(
+        `${config.endpoint}/reviews/update/${review.id}`,
+        review
+      );
+      dispatch({ type: types.UPDATE_BOOK_REVIEW_SUCCESS, review: data.review });
+    } catch (error) {
+      dispatch({ type: types.UPDATE_BOOK_REVIEW_FAILED });
+    }
+  };
+}

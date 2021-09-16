@@ -76,7 +76,7 @@ describe("BookListContainer related actions", () => {
           expect(actions).toEqual(expectedActions);
         });
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   });
 
   it("Fetches book", () => {
@@ -123,11 +123,30 @@ describe("BookListContainer related actions", () => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(
         `${config.endpoint}/reviews/create`,
-        review,
+        review
       );
       expect(actions).toEqual([
         { type: types.POST_BOOK_REVIEW_PENDING },
         { type: types.POST_BOOK_REVIEW_SUCCESS, review },
+      ]);
+    });
+  });
+
+  it("Edits a review for a book", () => {
+    const review = testReviews[0];
+    axios.post = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve({ data: { review } }));
+    const store = mockStore({ currentBook: { reviews: testReviews } });
+    return store.dispatch(actions.updateReview(review)).then(() => {
+      const actions = store.getActions();
+      expect(axios.post).toHaveBeenCalledWith(
+        `${config.endpoint}/reviews/update/${review.id}`,
+        review
+      );
+      expect(actions).toEqual([
+        { type: types.UPDATE_BOOK_REVIEW_PENDING },
+        { type: types.UPDATE_BOOK_REVIEW_SUCCESS, review },
       ]);
     });
   });
@@ -147,7 +166,7 @@ describe("BookListContainer related actions", () => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(
         `${config.endpoint}/users/login`,
-        credentials,
+        credentials
       );
       expect(actions).toEqual([
         { type: types.LOGIN_SUCCESS, user: credentials },
@@ -170,7 +189,7 @@ describe("BookListContainer related actions", () => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(
         `${config.endpoint}/users/login`,
-        credentials,
+        credentials
       );
       expect(actions).toEqual([{ type: types.LOGIN_FAILED }]);
     });
@@ -193,7 +212,7 @@ describe("BookListContainer related actions", () => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(
         `${config.endpoint}/users/register`,
-        credentials,
+        credentials
       );
       expect(actions).toEqual([
         { type: types.REGISTER_USER_SUCCESS, user: credentials },
@@ -218,11 +237,9 @@ describe("BookListContainer related actions", () => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(
         `${config.endpoint}/users/register`,
-        credentials,
+        credentials
       );
-      expect(actions).toEqual([
-        { type: types.REGISTER_USER_FAILED },
-      ]);
+      expect(actions).toEqual([{ type: types.REGISTER_USER_FAILED }]);
     });
   });
 });

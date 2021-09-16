@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { renderWithProvider } from "../testHelpers.js";
 import Review from "./Review.js";
 
 describe("Review", () => {
@@ -11,7 +11,7 @@ describe("Review", () => {
         createdAt: new Date().toISOString(),
       },
     };
-    const { container } = render(<Review {...props} />);
+    const { container } = renderWithProvider(<Review {...props} />);
     const name = container.querySelector('[data-test="review-name"]');
     const content = container.querySelector('[data-test="review-content"]');
     expect(name.innerHTML).toEqual(props.review.name);

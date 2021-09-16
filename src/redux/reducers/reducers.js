@@ -35,6 +35,11 @@ export function currentBookReducer(state = {}, action) {
         ...state,
         book: addReview(state.book, action.review),
       };
+    case types.UPDATE_BOOK_REVIEW_SUCCESS:
+      return {
+        ...state,
+        book: updateReview(state.book, action.review),
+      };
     default:
       return state;
   }
@@ -44,6 +49,13 @@ function addReview(book, review) {
   return {
     ...book,
     reviews: book.reviews.concat(review),
+  };
+}
+
+function updateReview(book, review) {
+  return {
+    ...book,
+    reviews: book.reviews.map(r => (r.id === review.id ? review : r)),
   };
 }
 

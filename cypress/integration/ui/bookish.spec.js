@@ -96,6 +96,12 @@ function checkLoginForm() {
   cy.get('[data-test="login-submit');
 }
 
+function editReviewWith(content) {
+  cy.get('[data-test="review-edit-button').click();
+  cy.get('[data-test="review-content-input"]').clear().type(content);
+  cy.get('[data-test="review-edit-button').click();
+}
+
 describe("Bookster application", function () {
   before(() => {
     cleanup();
@@ -145,6 +151,17 @@ describe("Bookster application", function () {
     checkReview({
       name: TEST_CREDENTIALS.username,
       content: "Excellent work!",
+    });
+  });
+
+  it("Edits a review for a book", () => {
+    login(TEST_CREDENTIALS);
+    gotoNthBookInTheList(1);
+    checkBookDetail("Building Microservices", 2);
+    editReviewWith("Excellent work! I love this book.");
+    checkReview({
+      name: TEST_CREDENTIALS.username,
+      content: "Excellent work! I love this book.",
     });
   });
 
