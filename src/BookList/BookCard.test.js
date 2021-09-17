@@ -10,9 +10,7 @@ describe("BookCard", () => {
   let store;
   beforeEach(() => {
     store = mockStore({
-      books: {
-        list: testBooks,
-      },
+      books: testBooks
     });
   });
 

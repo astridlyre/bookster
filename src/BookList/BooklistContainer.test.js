@@ -36,7 +36,8 @@ describe("BooklistContainer", () => {
   it("handles error", async () => {
     const mock = new MockAdapter(axios);
     mock.onGet(`${config.endpoint}/books`).networkError();
-    const { findByText } = renderWithProvider(<BooklistContainer />);
+    const props = {error: true}
+    const { findByText } = renderWithProvider(<BooklistContainer {...props}/>);
     const error = await findByText("an Error has occured");
     expect(error).toBeInTheDocument();
   });

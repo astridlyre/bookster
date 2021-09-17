@@ -11,14 +11,14 @@ const mockStore = configureMockStore(middlewares);
 
 describe("BookListContainer related actions", () => {
   it("Sets the search keyword", () => {
-    const term = { value: "" };
+    const term = "";
     const expected = [
       {
         type: types.SET_SEARCH_TERM,
-        term,
+        payload: term,
       },
     ];
-    const store = mockStore({ books: { list: [] }, term: { value: "hello" } });
+    const store = mockStore({ books: [], term: "hello" });
     return store.dispatch(actions.setSearchTerm(term)).then(() => {
       expect(store.getActions()).toEqual(expected);
     });
@@ -32,9 +32,9 @@ describe("BookListContainer related actions", () => {
       );
     const expectedActions = [
       { type: types.FETCH_BOOKS_PENDING },
-      { type: types.FETCH_BOOKS_SUCCESS, books: testBooks },
+      { type: types.FETCH_BOOKS_SUCCESS, payload: testBooks },
     ];
-    const store = mockStore({ books: { list: [] }, term: { value: "" } });
+    const store = mockStore({ books: [], term: "" });
     return store.dispatch(actions.fetchBooks()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
@@ -48,9 +48,12 @@ describe("BookListContainer related actions", () => {
       );
     const expectedActions = [
       { type: types.FETCH_BOOKS_PENDING },
-      { type: types.FETCH_BOOKS_FAILED, error: "Something went wrong" },
+      {
+        type: types.FETCH_BOOKS_FAILED,
+        payload: { message: "Something went wrong" },
+      },
     ];
-    const store = mockStore({ books: { list: [] }, term: { value: "" } });
+    const store = mockStore({ books: [], term: "" });
     return store.dispatch(actions.fetchBooks()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
@@ -58,16 +61,16 @@ describe("BookListContainer related actions", () => {
 
   it("Searches books with term", () => {
     const expectedActions = [
-      { type: types.SET_SEARCH_TERM, term: "driven" },
+      { type: types.SET_SEARCH_TERM, payload: "driven" },
       { type: types.FETCH_BOOKS_PENDING },
-      { type: types.FETCH_BOOKS_SUCCESS, books: testBooks },
+      { type: types.FETCH_BOOKS_SUCCESS, payload: testBooks },
     ];
     axios.get = jest
       .fn()
       .mockImplementation(() =>
         Promise.resolve({ data: { books: testBooks } })
       );
-    const store = mockStore({ books: { list: [] }, term: { value: "" } });
+    const store = mockStore({ books: [], term: "" });
     store
       .dispatch(actions.setSearchTerm("driven"))
       .then(() => {
@@ -82,7 +85,7 @@ describe("BookListContainer related actions", () => {
   it("Fetches book", () => {
     const expectedActions = [
       { type: types.FETCH_CURRENT_BOOK_PENDING },
-      { type: types.FETCH_CURRENT_BOOK_SUCCESS, book: testBooks[0] },
+      { type: types.FETCH_CURRENT_BOOK_SUCCESS, payload: testBooks[0] },
     ];
     axios.get = jest
       .fn()
@@ -99,7 +102,10 @@ describe("BookListContainer related actions", () => {
   it("Fetches book with error", () => {
     const expectedActions = [
       { type: types.FETCH_CURRENT_BOOK_PENDING },
-      { type: types.FETCH_CURRENT_BOOK_FAILED, error: "Something went wrong" },
+      {
+        type: types.FETCH_CURRENT_BOOK_FAILED,
+        payload: { message: "Something went wrong" },
+      },
     ];
     axios.get = jest
       .fn()
@@ -118,7 +124,7 @@ describe("BookListContainer related actions", () => {
     axios.post = jest
       .fn()
       .mockImplementation(() => Promise.resolve({ data: { review } }));
-    const store = mockStore({ books: { list: [] }, term: { value: "" } });
+    const store = mockStore({ books: [], term: "" });
     return store.dispatch(actions.postReview(review)).then(() => {
       const actions = store.getActions();
       expect(axios.post).toHaveBeenCalledWith(
@@ -127,26 +133,47 @@ describe("BookListContainer related actions", () => {
       );
       expect(actions).toEqual([
         { type: types.POST_BOOK_REVIEW_PENDING },
-        { type: types.POST_BOOK_REVIEW_SUCCESS, review },
+        { type: types.POST_BOOK_REVIEW_SUCCESS, payload: review },
       ]);
     });
   });
 
   it("Edits a review for a book", () => {
     const review = testReviews[0];
-    axios.post = jest
+    axios.put = jest
       .fn()
       .mockImplementation(() => Promise.resolve({ data: { review } }));
     const store = mockStore({ currentBook: { reviews: testReviews } });
     return store.dispatch(actions.updateReview(review)).then(() => {
       const actions = store.getActions();
-      expect(axios.post).toHaveBeenCalledWith(
+      expect(axios.put).toHaveBeenCalledWith(
         `${config.endpoint}/reviews/update/${review.id}`,
         review
       );
       expect(actions).toEqual([
         { type: types.UPDATE_BOOK_REVIEW_PENDING },
-        { type: types.UPDATE_BOOK_REVIEW_SUCCESS, review },
+        { type: types.UPDATE_BOOK_REVIEW_SUCCESS, payload: review },
+      ]);
+    });
+  });
+
+  it("Handles editing review error", () => {
+    const review = testReviews[0];
+    axios.put = jest
+      .fn()
+      .mockImplementation(() =>
+        Promise.reject({ error: { message: "Something went wrong" } })
+      );
+    const store = mockStore({ currentBook: { reviews: testReviews } });
+    return store.dispatch(actions.updateReview(review)).then(() => {
+      const actions = store.getActions();
+      expect(axios.put).toHaveBeenCalledWith(
+        `${config.endpoint}/reviews/update/${review.id}`,
+        review
+      );
+      expect(actions).toEqual([
+        { type: types.UPDATE_BOOK_REVIEW_PENDING },
+        { type: types.UPDATE_BOOK_REVIEW_FAILED },
       ]);
     });
   });
@@ -169,7 +196,8 @@ describe("BookListContainer related actions", () => {
         credentials
       );
       expect(actions).toEqual([
-        { type: types.LOGIN_SUCCESS, user: credentials },
+        { type: types.LOGIN_PENDING },
+        { type: types.LOGIN_SUCCESS, payload: credentials },
       ]);
     });
   });
@@ -179,11 +207,8 @@ describe("BookListContainer related actions", () => {
       username: "juntao",
       password: "123456",
     };
-    axios.post = jest
-      .fn()
-      .mockImplementation(() =>
-        Promise.reject({ error: { message: "Something went wrong" } })
-      );
+    const error = { message: "Something went wrong" };
+    axios.post = jest.fn().mockImplementation(() => Promise.reject({ error }));
     const store = mockStore({ currentUser: {} });
     return store.dispatch(actions.loginUser(credentials)).then(() => {
       const actions = store.getActions();
@@ -191,7 +216,13 @@ describe("BookListContainer related actions", () => {
         `${config.endpoint}/users/login`,
         credentials
       );
-      expect(actions).toEqual([{ type: types.LOGIN_FAILED }]);
+      expect(actions).toEqual([
+        { type: types.LOGIN_PENDING },
+        {
+          type: types.LOGIN_FAILED,
+          payload: { error },
+        },
+      ]);
     });
   });
 
@@ -215,7 +246,8 @@ describe("BookListContainer related actions", () => {
         credentials
       );
       expect(actions).toEqual([
-        { type: types.REGISTER_USER_SUCCESS, user: credentials },
+        { type: types.REGISTER_USER_PENDING },
+        { type: types.REGISTER_USER_SUCCESS, payload: credentials },
       ]);
     });
   });
@@ -227,11 +259,8 @@ describe("BookListContainer related actions", () => {
       password: "123456",
       confirmPassword: "123456",
     };
-    axios.post = jest
-      .fn()
-      .mockImplementation(() =>
-        Promise.reject({ error: { message: "Something went wrong" } })
-      );
+    const error = { message: "Something went wrong" };
+    axios.post = jest.fn().mockImplementation(() => Promise.reject({ error }));
     const store = mockStore({ currentUser: {} });
     return store.dispatch(actions.registerUser(credentials)).then(() => {
       const actions = store.getActions();
@@ -239,7 +268,13 @@ describe("BookListContainer related actions", () => {
         `${config.endpoint}/users/register`,
         credentials
       );
-      expect(actions).toEqual([{ type: types.REGISTER_USER_FAILED }]);
+      expect(actions).toEqual([
+        { type: types.REGISTER_USER_PENDING },
+        {
+          type: types.REGISTER_USER_FAILED,
+          payload: { error },
+        },
+      ]);
     });
   });
 });

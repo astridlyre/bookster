@@ -16,7 +16,7 @@ describe("SearchBox", () => {
 
   it("trims empty strings", () => {
     const props = {
-      term: { value: "" },
+      term: { value: ""},
       handleSearch: jest.fn(),
     };
     const { container } = renderWithRouterAndProvider(<SearchBox {...props} />);

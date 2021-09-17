@@ -51,16 +51,21 @@ export default function SearchBox({ handleSearch }) {
   const location = useLocation();
   const [isSearching, setIsSearching] = useState(false);
   const term = useSelector(searchTermSelector);
+  const [searchTerm, setSearchTerm] = useState(term)
 
   const startSearching = () => setTimeout(() => setIsSearching(null), 250);
 
   const protect = event => {
-    if (isSearching) {
-      clearTimeout(isSearching);
+    setSearchTerm(event.target.value)
+    if (isSearching) clearTimeout(isSearching)
+    if (event.target.value === "") {
+      setIsSearching(null)
+      return handleSearch("")
     }
-    if (event.target.value === " ") return;
-    setIsSearching(startSearching());
     const value = event.target.value.trim();
+    if (value === "") return setIsSearching(null)
+
+    setIsSearching(startSearching());
     if (location.pathname !== "/") history.push("/");
     handleSearch(value);
   };
@@ -72,16 +77,16 @@ export default function SearchBox({ handleSearch }) {
           <SearchIcon />
         </div>
         <InputBase
+          value={searchTerm}
+          inputProps={{ "aria-label": "search" }}
           placeholder="Search..."
           title="Search for a book"
-          value={term.value}
           data-test="search"
           onChange={protect}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
-          inputProps={{ "aria-label": "search" }}
         />
       </div>
       {isSearching && <CircularProgress size="2rem" color="secondary" />}

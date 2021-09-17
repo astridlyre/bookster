@@ -34,9 +34,8 @@ export default function Review({ review }) {
   const handleEditing = async () => {
     if (isEditing === true) {
       dispatch(updateReview({ ...review, content }));
-      return setIsEditing(false);
     }
-    return setIsEditing(true);
+    setIsEditing(s => !s);
   };
 
   return (

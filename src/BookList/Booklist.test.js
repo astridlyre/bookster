@@ -11,9 +11,7 @@ describe("Booklist", () => {
 
   beforeEach(() => {
     store = mockStore({
-      books: {
-        list: testBooks,
-      },
+      books: testBooks
     });
   });
 

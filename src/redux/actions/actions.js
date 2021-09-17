@@ -3,7 +3,7 @@ import * as types from "../types.js";
 import config from "../../config.js";
 
 const TOKEN_KEY = "BOOKLIST_APP_TOKEN";
-const saveToken = token => localStorage.setItem(TOKEN_KEY, token);
+const saveToken = (token) => localStorage.setItem(TOKEN_KEY, token);
 const clearToken = () => localStorage.removeItem(TOKEN_KEY);
 
 axios.interceptors.request.use(function (config) {
@@ -13,28 +13,28 @@ axios.interceptors.request.use(function (config) {
 });
 
 export function loginUser(credentials) {
-  return async dispatch => {
+  return async (dispatch) => {
+    dispatch({ type: types.LOGIN_PENDING });
     try {
       const { data } = await axios.post(
         `${config.endpoint}/users/login`,
-        credentials
+        credentials,
       );
       saveToken(data.token);
-      dispatch({ type: types.LOGIN_SUCCESS, user: data.user });
+      dispatch({ type: types.LOGIN_SUCCESS, payload: data.user });
     } catch (error) {
-      console.error(error);
-      dispatch({ type: types.LOGIN_FAILED, error: error.message });
+      dispatch({ type: types.LOGIN_FAILED, payload: error });
     }
   };
 }
 
 export function logoutUser() {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       await axios.delete(`${config.endpoint}/users/logout`);
       clearToken();
-    } catch (error) {
-      console.error(error);
+    } catch (_) {
+      // No need to handle error for logout
     } finally {
       dispatch({ type: types.LOGOUT_USER });
     }
@@ -42,30 +42,30 @@ export function logoutUser() {
 }
 
 export function getProfile() {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       const { data } = await axios.get(`${config.endpoint}/users/profile`);
       if (data.user) {
-        dispatch({ type: types.LOGIN_SUCCESS, user: data.user });
+        dispatch({ type: types.LOGIN_SUCCESS, payload: data.user });
       }
-    } catch (error) {
-      console.error(error);
+    } catch (_) {
+      // No need to handle error for attempted auto login
     }
   };
 }
 
 export function registerUser(user) {
-  return async dispatch => {
+  return async (dispatch) => {
+    dispatch({ type: types.REGISTER_USER_PENDING });
     try {
       const { data } = await axios.post(
         `${config.endpoint}/users/register`,
-        user
+        user,
       );
       saveToken(data.token);
-      dispatch({ type: types.REGISTER_USER_SUCCESS, user: data.user });
+      dispatch({ type: types.REGISTER_USER_SUCCESS, payload: data.user });
     } catch (error) {
-      console.error(error);
-      dispatch({ type: types.REGISTER_USER_FAILED, error: error.message });
+      dispatch({ type: types.REGISTER_USER_FAILED, payload: error });
     }
   };
 }
@@ -76,62 +76,64 @@ export function fetchBooks() {
     const { term } = getState();
     try {
       const { data } = await axios.get(
-        `${config.endpoint}/books${term.value ? `?q=${term.value}` : ""}`
+        `${config.endpoint}/books${term ? `?q=${term}` : ""}`,
       );
-      dispatch({ type: types.FETCH_BOOKS_SUCCESS, books: data.books });
+      dispatch({ type: types.FETCH_BOOKS_SUCCESS, payload: data.books });
     } catch (error) {
-      dispatch({ type: types.FETCH_BOOKS_FAILED, error: error.message });
+      dispatch({ type: types.FETCH_BOOKS_FAILED, payload: error });
     }
   };
 }
 
 export function setSearchTerm(term) {
-  return async dispatch => {
-    dispatch({
-      type: types.SET_SEARCH_TERM,
-      term,
-    });
-  };
+  return (dispatch) =>
+    Promise.resolve(dispatch({ type: types.SET_SEARCH_TERM, payload: term }));
 }
 
 export function fetchABook(id) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: types.FETCH_CURRENT_BOOK_PENDING });
     try {
       const { data } = await axios.get(`${config.endpoint}/books/${id}`);
-      dispatch({ type: types.FETCH_CURRENT_BOOK_SUCCESS, book: data.book });
+      dispatch({ type: types.FETCH_CURRENT_BOOK_SUCCESS, payload: data.book });
     } catch (error) {
-      dispatch({ type: types.FETCH_CURRENT_BOOK_FAILED, error: error.message });
+      dispatch({ type: types.FETCH_CURRENT_BOOK_FAILED, payload: error });
     }
   };
 }
 
 export function postReview(review) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: types.POST_BOOK_REVIEW_PENDING });
     try {
       const { data } = await axios.post(
         `${config.endpoint}/reviews/create`,
-        review
+        review,
       );
-      dispatch({ type: types.POST_BOOK_REVIEW_SUCCESS, review: data.review });
+      dispatch({ type: types.POST_BOOK_REVIEW_SUCCESS, payload: data.review });
     } catch (error) {
-      dispatch({ type: types.POST_BOOK_REVIEW_FAILED, error: error.message });
+      dispatch({ type: types.POST_BOOK_REVIEW_FAILED, payload: error });
     }
   };
 }
 
 export function updateReview(review) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: types.UPDATE_BOOK_REVIEW_PENDING });
     try {
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `${config.endpoint}/reviews/update/${review.id}`,
-        review
+        review,
       );
-      dispatch({ type: types.UPDATE_BOOK_REVIEW_SUCCESS, review: data.review });
+      dispatch({
+        type: types.UPDATE_BOOK_REVIEW_SUCCESS,
+        payload: data.review,
+      });
     } catch (error) {
-      dispatch({ type: types.UPDATE_BOOK_REVIEW_FAILED });
+      dispatch({
+        type: types.UPDATE_BOOK_REVIEW_FAILED,
+        payload: error.message,
+      });
     }
   };
 }

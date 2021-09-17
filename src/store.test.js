@@ -12,8 +12,8 @@ describe("Store", () => {
       .mockImplementation(() => Promise.resolve({ data: { books } }));
     return store.dispatch(actions.fetchBooks()).then(() => {
       const state = store.getState();
-      expect(state.books.list.length).toEqual(1);
-      expect(state.books.list).toEqual(books);
+      expect(state.books.length).toEqual(1);
+      expect(state.books).toEqual(books);
     });
   });
 
@@ -23,7 +23,7 @@ describe("Store", () => {
       .mockImplementation(() => Promise.resolve({ data: { book: books[0] } }));
     return store.dispatch(actions.fetchABook()).then(() => {
       const state = store.getState();
-      expect(state.currentBook.book).toEqual(books[0]);
+      expect(state.currentBook).toEqual(books[0]);
     });
   });
 });

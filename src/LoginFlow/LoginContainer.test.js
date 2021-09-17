@@ -22,7 +22,7 @@ const TEST_REGISTER = {
 
 describe("LoginContainer", () => {
   it("renders login form", () => {
-    const store = createMockStore({ currentUser: {} });
+    const store = createMockStore({ currentUser: {}, errors: {} });
     const { container } = renderWithRouterAndProvider(
       <LoginContainer />,
       store
@@ -37,7 +37,7 @@ describe("LoginContainer", () => {
         data: { username: TEST_LOGIN.username, token: "hello" },
       })
     );
-    const store = createMockStore({ currentUser: {} });
+    const store = createMockStore({ currentUser: {}, errors: {} });
     const { container } = renderWithRouterAndProvider(
       <LoginContainer />,
       store
@@ -59,7 +59,7 @@ describe("LoginContainer", () => {
   });
 
   it("shows signup form", () => {
-    const store = createMockStore({ currentUser: {} });
+    const store = createMockStore({ currentUser: {}, errors: {} });
     const { container } = renderWithRouterAndProvider(
       <LoginContainer />,
       store
@@ -78,7 +78,7 @@ describe("LoginContainer", () => {
         data: { username: TEST_REGISTER.username, token: "hello" },
       })
     );
-    const store = createMockStore({ currentUser: {} });
+    const store = createMockStore({ currentUser: {}, errors: {} });
     const { container } = renderWithRouterAndProvider(
       <LoginContainer />,
       store
